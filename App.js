@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import React from "react";
 import Details from "./screens/Details";
@@ -9,17 +9,20 @@ import Result from "./screens/Result";
 import Sreach from "./screens/Sreach";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
+const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
-const App = () => {
+export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="Home" component={Home} />
-        <Tab.Screen name="Result" component={Result} />
-      </Tab.Navigator>
+      <Drawer.Navigator initialRouteName="Home">
+        <Drawer.Screen name="Home" component={Home} />
+        <Drawer.Screen name="Show All" component={Result} />
+        <Drawer.Screen name="Sreach" component={Sreach} />
+        <Drawer.Screen name="Details" component={Details} />
+      </Drawer.Navigator>
     </NavigationContainer>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -28,5 +31,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
-export default App;
