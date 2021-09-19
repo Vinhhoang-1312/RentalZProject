@@ -6,7 +6,8 @@ const Home = () => {
 
   return (
     <View style={styles.body}>
-      <Text>HOME SCREEN</Text>
+      <Text style={styles.head}>HOME</Text>
+
       <TextInput
         style={styles.input}
         placeholder="Property type"
@@ -33,7 +34,16 @@ const Home = () => {
         // onChangeText={(value) => setName(value)}
       />
       <TextInput
-        style={styles.input}
+        style={{
+          borderWidth: 1,
+          height: 80,
+          width: 220,
+          borderRadius: 5,
+          textAlign: "center",
+          fontSize: 17,
+          marginBottom: 10,
+          marginTop: 10,
+        }}
         placeholder="Notes Feature e)"
         // onChangeText={(value) => setName(value)}
       />
@@ -70,6 +80,15 @@ const Home = () => {
 export default Home;
 
 const styles = StyleSheet.create({
+  head: {
+    marginTop: 20,
+    textAlign: "center",
+    color: "black",
+    fontWeight: "bold",
+    fontSize: 20,
+    marginBottom: 10,
+    marginTop: 10,
+  },
   body: {
     flex: 1,
     alignItems: "center",
@@ -84,16 +103,19 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    height: 50,
-    width: 250,
+    height: 40,
+    width: 220,
     borderRadius: 5,
     textAlign: "center",
-    fontSize: 20,
+    fontSize: 17,
     marginBottom: 10,
     marginTop: 10,
   },
   buttonStyle: {
-    marginHorizontal: 20,
-    marginTop: 5,
+    marginHorizontal: 10,
+    borderRadius: 15,
+    marginTop: 10,
+    height: 80,
+    width: 100,
   },
 });
