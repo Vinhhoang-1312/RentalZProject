@@ -1,19 +1,26 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, Button, TextInput } from "react-native";
 
-const Home = () => {
-  const [text, setText] = useState("");
+import { Entypo } from "@expo/vector-icons";
 
+const Home = () => {
+  const [propertytype, setpropertytype] = useState("hoang");
   return (
     <View style={styles.body}>
       <Text style={styles.head}>HOME</Text>
+      <View>
+        <TextInput
+          multiline
+          style={styles.input}
+          placeholder="Property type *"
+          onChangeText={(val) => setpropertytype(val)}
+        ></TextInput>
+        <Entypo name="star" size={10} color="red" />
+        <Text>propertytype:{propertytype} </Text>
+      </View>
 
       <TextInput
-        style={styles.input}
-        placeholder="Property type"
-        // onChangeText={(value) => setName(value)}
-      />
-      <TextInput
+        keyboardType="numeric"
         style={styles.input}
         placeholder="Bedrooms"
         // onChangeText={(value) => setName(value)}
@@ -25,6 +32,7 @@ const Home = () => {
       />
       <TextInput
         style={styles.input}
+        keyboardType="numeric"
         placeholder="Monthly rent price"
         // onChangeText={(value) => setName(value)}
       />
