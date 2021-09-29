@@ -1,10 +1,149 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, Button, TextInput } from "react-native";
+import * as SQLite from "expo-sqlite";
+import React, { useEffect, useState } from "react";
+import { Alert, StyleSheet, Text, Button, TextInput, View } from "react-native";
 
-import { Entypo } from "@expo/vector-icons";
+const db = SQLite.openDatabase("dbName", 1.0);
 
-const Home = () => {
-  const [propertytype, setpropertytype] = useState("hoang");
+const Home = ({ navigation }) => {
+  const [propertytype, setpropertytype] = useState("");
+  const [bedrooms, setbedrooms] = useState("");
+  const [dateandtime, setdateandtime] = useState("");
+  const [price, setprice] = useState("");
+  const [furniture, setfurniture] = useState("");
+  const [notes, setnotes] = useState("");
+  const [reporter, setreporter] = useState("");
+  useEffect(() => {
+    createTable();
+    getData();
+  }, []);
+
+  const getData = () => {
+    try {
+      db.transaction((tx) => {
+        tx.executeSql(
+          "SELECT propertytype,bedrooms, dateandtime,price,  furniture, notes, reporter  FROM Data",
+          [],
+          (tx, result) => {
+            var len = result.rows.length;
+            if (len > 0) {
+              navigation.navigate("Details");
+            }
+          }
+        );
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const home = () => {
+    if (
+      propertytype.length === 0 ||
+      bedrooms.length === 0 ||
+      dateandtime.length === 0 ||
+      price.length === 0 ||
+      furniture.length === 0 ||
+      notes.length === 0 ||
+      reporter.length === 0
+    ) {
+      Alert.alert("Warning !!!. Please enter your data!!!");
+    } else {
+      try {
+        db.transaction((tx) => {
+          tx.executeSql(
+            "INSERT INTO Data (propertytype, bedrooms,dateandtime,price,furniture,notes,reporter) VALUES (?,?,?,?,?,?,?);",
+
+            [
+              propertytype,
+              bedrooms,
+              dateandtime,
+              price,
+              furniture,
+              notes,
+              reporter,
+            ],
+            (tx, results) => {
+              console.log(results.rowsAffected);
+            }
+          );
+        });
+        navigation.navigate("Details");
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const createTable = () => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "CREATE TABLE IF NOT EXISTS Data(ID INTEGER PRIMARY KEY AUTOINCREMENT,propertytype TEXT,bedrooms INTEGER dateandtime DATETIME, price INTEGER ,furniture TEXT , notes TEXT, reporter TEXT );"
+      );
+    });
+  };
+
+  // const createTable = () => {
+  //   db.transaction((tx) => {
+  //     tx.executeSql(
+  //       "CREATE TABLE IF NOT EXISTS " +
+  //         "Data " +
+  //         "(ID INTEGER PRIMARY KEY AUTOINCREMENT,propertytype TEXT,bedrooms INTEGER dateandtime DATETIME, price INTEGER ,furniture TEXT , notes TEXT, reporter TEXT );"
+  //     );
+  //   });
+  // };
+  // const getData = () => {
+  //   try {
+  //     db.transaction((tx) => {
+  //       tx.executeSql(
+  //         "SELECT propertytype,bedrooms, dateandtime,price,  furniture, notes, reporter  FROM Data",
+  //         [],
+  //         (tx, results) => {
+  //           var len = results.rows.length;
+  //           if (len > 0) {
+  //             navigation.navigate("Details");
+  //           }
+  //         }
+  //       );
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // const setData = async () => {
+  //   if (
+  //     propertytype.length == 0 ||
+  //     bedrooms.length == 0 ||
+  //     dateandtime.length == 0 ||
+  //     price.length == 0 ||
+  //     furniture.length == 0 ||
+  //     notes.length == 0 ||
+  //     reporter.length == 0
+  //   ) {
+  //     Alert.alert("Warning!", "Please write your data.");
+  //   } else {
+  //     try {
+  //       await db.transaction(async (tx) => {
+  //         await tx.executeSql(
+  //           "INSERT INTO Data (propertytype, bedrooms,dateandtime,price,furniture,notes,reporter) VALUES (?,?,?,?,?,?,?)",
+  //           [
+  //             propertytype,
+  //             bedrooms,
+  //             dateandtime,
+  //             price,
+  //             furniture,
+  //             notes,
+  //             reporter,
+  //           ]
+  //         );
+  //       });
+  //       navigation.navigate("Home");
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  // };
+
   return (
     <View style={styles.body}>
       <Text style={styles.head}>HOME</Text>
@@ -13,33 +152,38 @@ const Home = () => {
           multiline
           style={styles.input}
           placeholder="Property type *"
-          onChangeText={(val) => setpropertytype(val)}
+          onChangeText={(value) => setpropertytype(value)}
+          value={propertytype}
         ></TextInput>
-        <Entypo name="star" size={10} color="red" />
-        <Text>propertytype:{propertytype} </Text>
+        {/* 
+        <Text>propertytype:{propertytype} </Text> */}
       </View>
 
       <TextInput
         keyboardType="numeric"
         style={styles.input}
         placeholder="Bedrooms"
-        // onChangeText={(value) => setName(value)}
+        onChangeText={(value) => setbedrooms(value)}
+        value={bedrooms}
       />
       <TextInput
         style={styles.input}
         placeholder="Date and Time"
-        // onChangeText={(value) => setName(value)}
+        onChangeText={(value) => setdateandtime(value)}
+        value={dateandtime}
       />
       <TextInput
         style={styles.input}
         keyboardType="numeric"
         placeholder="Monthly rent price"
-        // onChangeText={(value) => setName(value)}
+        onChangeText={(value) => setprice(value)}
+        value={price}
       />
       <TextInput
         style={styles.input}
-        placeholder="Furniture typpes"
-        // onChangeText={(value) => setName(value)}
+        placeholder="Furniture types"
+        onChangeText={(value) => setfurniture(value)}
+        value={furniture}
       />
       <TextInput
         style={{
@@ -53,39 +197,36 @@ const Home = () => {
           marginTop: 10,
         }}
         placeholder="Notes Feature e)"
-        // onChangeText={(value) => setName(value)}
+        onChangeText={(value) => setnotes(value)}
+        value={notes}
       />
       <TextInput
         style={styles.input}
         placeholder="Name of the reporter"
-        // onChangeText={(value) => setName(value)}
+        onChangeText={(value) => setreporter(value)}
+        value={reporter}
       />
 
       <View style={{ flexDirection: "row" }}>
         <View style={styles.buttonStyle}>
           <Button
             title="Show All"
-            // handlePress={logout}
+            // handlePress={}
           />
         </View>
         <View style={styles.buttonStyle}>
           <Button
             title="Sreach"
-            // handlePress={logout}
+            // handlePress={}
           />
         </View>
         <View style={styles.buttonStyle}>
-          <Button
-            title="Submit"
-            // handlePress={logout}
-          />
+          <Button title="Submit" onPressFunction={home} />
         </View>
       </View>
     </View>
   );
 };
-
-export default Home;
 
 const styles = StyleSheet.create({
   head: {
@@ -127,3 +268,4 @@ const styles = StyleSheet.create({
     width: 100,
   },
 });
+export default Home;

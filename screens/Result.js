@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 const Result = () => {
   return (
     <View>
-      <Text>RESULT Screen</Text>
+      <Text></Text>
     </View>
   );
 };
