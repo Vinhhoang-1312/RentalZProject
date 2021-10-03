@@ -1,7 +1,7 @@
 import * as SQLite from "expo-sqlite";
 import React, { useEffect, useState } from "react";
 import { Alert, StyleSheet, Text, Button, TextInput, View } from "react-native";
-
+import CustomButton from "../components/CustomButton";
 const db = SQLite.openDatabase("dbName", 1.0);
 
 const Home = ({ navigation }) => {
@@ -17,14 +17,23 @@ const Home = ({ navigation }) => {
     getData();
   }, []);
 
+  const createTable = () => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "CREATE TABLE IF NOT EXISTS " +
+          "Data " +
+          "(ID INTEGER PRIMARY KEY AUTOINCREMENT,propertytype TEXT,bedrooms INTEGER ,dateandtime DATETIME, price INTEGER ,furniture TEXT , notes TEXT, reporter TEXT);"
+      );
+    });
+  };
   const getData = () => {
     try {
       db.transaction((tx) => {
         tx.executeSql(
           "SELECT propertytype,bedrooms, dateandtime,price,  furniture, notes, reporter  FROM Data",
           [],
-          (tx, result) => {
-            var len = result.rows.length;
+          (tx, results) => {
+            var len = results.rows.length;
             if (len > 0) {
               navigation.navigate("Details");
             }
@@ -38,13 +47,14 @@ const Home = ({ navigation }) => {
 
   const home = () => {
     if (
-      propertytype.length === 0 ||
-      bedrooms.length === 0 ||
-      dateandtime.length === 0 ||
-      price.length === 0 ||
-      furniture.length === 0 ||
-      notes.length === 0 ||
-      reporter.length === 0
+      propertytype.length === 0
+      //  ||
+      // bedrooms.length === 0 ||
+      // dateandtime.length === 0 ||
+      // price.length === 0 ||
+      // furniture.length === 0 ||
+      // notes.length === 0 ||
+      // reporter.length === 0
     ) {
       Alert.alert("Warning !!!. Please enter your data!!!");
     } else {
@@ -74,91 +84,23 @@ const Home = ({ navigation }) => {
     }
   };
 
-  const createTable = () => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        "CREATE TABLE IF NOT EXISTS Data(ID INTEGER PRIMARY KEY AUTOINCREMENT,propertytype TEXT,bedrooms INTEGER dateandtime DATETIME, price INTEGER ,furniture TEXT , notes TEXT, reporter TEXT );"
-      );
-    });
-  };
-
-  // const createTable = () => {
-  //   db.transaction((tx) => {
-  //     tx.executeSql(
-  //       "CREATE TABLE IF NOT EXISTS " +
-  //         "Data " +
-  //         "(ID INTEGER PRIMARY KEY AUTOINCREMENT,propertytype TEXT,bedrooms INTEGER dateandtime DATETIME, price INTEGER ,furniture TEXT , notes TEXT, reporter TEXT );"
-  //     );
-  //   });
-  // };
-  // const getData = () => {
-  //   try {
-  //     db.transaction((tx) => {
-  //       tx.executeSql(
-  //         "SELECT propertytype,bedrooms, dateandtime,price,  furniture, notes, reporter  FROM Data",
-  //         [],
-  //         (tx, results) => {
-  //           var len = results.rows.length;
-  //           if (len > 0) {
-  //             navigation.navigate("Details");
-  //           }
-  //         }
-  //       );
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // const setData = async () => {
-  //   if (
-  //     propertytype.length == 0 ||
-  //     bedrooms.length == 0 ||
-  //     dateandtime.length == 0 ||
-  //     price.length == 0 ||
-  //     furniture.length == 0 ||
-  //     notes.length == 0 ||
-  //     reporter.length == 0
-  //   ) {
-  //     Alert.alert("Warning!", "Please write your data.");
-  //   } else {
-  //     try {
-  //       await db.transaction(async (tx) => {
-  //         await tx.executeSql(
-  //           "INSERT INTO Data (propertytype, bedrooms,dateandtime,price,furniture,notes,reporter) VALUES (?,?,?,?,?,?,?)",
-  //           [
-  //             propertytype,
-  //             bedrooms,
-  //             dateandtime,
-  //             price,
-  //             furniture,
-  //             notes,
-  //             reporter,
-  //           ]
-  //         );
-  //       });
-  //       navigation.navigate("Home");
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-  // };
-
   return (
     <View style={styles.body}>
       <Text style={styles.head}>HOME</Text>
-      <View>
-        <TextInput
-          multiline
-          style={styles.input}
-          placeholder="Property type *"
-          onChangeText={(value) => setpropertytype(value)}
-          value={propertytype}
-        ></TextInput>
-        {/* 
-        <Text>propertytype:{propertytype} </Text> */}
-      </View>
 
+      {/* <TextInput
+        multiline
+        style={styles.input}
+        placeholder="Property type *"
+        onChangeText={(value) => setpropertytype(value)}
+        value={propertytype}
+      ></TextInput> */}
+      <TextInput
+        style={styles.input}
+        placeholder="Property type "
+        onChangeText={(value) => setpropertytype(value)}
+        value={propertytype}
+      />
       <TextInput
         keyboardType="numeric"
         style={styles.input}
@@ -220,9 +162,8 @@ const Home = ({ navigation }) => {
             // handlePress={}
           />
         </View>
-        <View style={styles.buttonStyle}>
-          <Button title="Submit" onPressFunction={home} />
-        </View>
+
+        <CustomButton title="submit" handlePress={home} />
       </View>
     </View>
   );
@@ -259,13 +200,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     marginBottom: 10,
     marginTop: 10,
-  },
-  buttonStyle: {
-    marginHorizontal: 10,
-    borderRadius: 15,
-    marginTop: 10,
-    height: 80,
-    width: 100,
   },
 });
 export default Home;
