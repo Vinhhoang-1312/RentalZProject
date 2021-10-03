@@ -15,6 +15,7 @@ const Home = ({ navigation }) => {
   useEffect(() => {
     createTable();
     getData();
+    home();
   }, []);
 
   const createTable = () => {
@@ -30,12 +31,12 @@ const Home = ({ navigation }) => {
     try {
       db.transaction((tx) => {
         tx.executeSql(
-          "SELECT propertytype,bedrooms, dateandtime,price,  furniture, notes, reporter  FROM Data",
+          "SELECT name FROM sqlite_master WHERE type='table' AND name='Data'",
           [],
-          (tx, results) => {
-            var len = results.rows.length;
+          (tx, result) => {
+            var len = result.rows.length;
             if (len > 0) {
-              navigation.navigate("Details");
+              navigation.navigate("Home");
             }
           }
         );

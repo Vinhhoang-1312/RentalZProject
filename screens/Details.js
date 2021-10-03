@@ -24,7 +24,7 @@ const Details = ({ navigation }) => {
   const getData = () => {
     try {
       db.transaction((tx) => {
-        console.log(111);
+        console.log(11111);
         tx.executeSql("SELECT * FROM Data;", [], (tx, result) => {
           console.log(JSON.stringify(result.rows));
           var len = result.rows.length;
