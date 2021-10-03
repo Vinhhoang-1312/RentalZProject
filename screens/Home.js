@@ -12,38 +12,59 @@ const Home = ({ navigation }) => {
   const [furniture, setfurniture] = useState("");
   const [notes, setnotes] = useState("");
   const [reporter, setreporter] = useState("");
-  useEffect(() => {
-    createTable();
-    getData();
-  }, []);
 
-  const createTable = () => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        "CREATE TABLE IF NOT EXISTS " +
-          "Data " +
-          "(ID INTEGER PRIMARY KEY AUTOINCREMENT,propertytype TEXT,bedrooms INTEGER ,dateandtime DATETIME, price INTEGER ,furniture TEXT , notes TEXT, reporter TEXT);"
+  useEffect(() => {
+    db.transaction(function (txn) {
+      txn.executeSql(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='Data'",
+
+        [],
+        function (tx, res) {
+          console.log("item:", res.rows.length);
+          if (res.rows.length == 0) {
+            txn.executeSql("DROP TABLE IF EXISTS Data", []);
+            txn.executeSql(
+              "CREATE TABLE IF NOT EXISTS Data(ID INTEGER PRIMARY KEY AUTOINCREMENT,propertytype TEXT,bedrooms INTEGER ,dateandtime DATETIME, price INTEGER ,furniture TEXT , notes TEXT, reporter TEXT )",
+              []
+            );
+          }
+        }
       );
     });
-  };
-  const getData = () => {
-    try {
-      db.transaction((tx) => {
-        tx.executeSql(
-          "SELECT propertytype,bedrooms, dateandtime,price,  furniture, notes, reporter  FROM Data",
-          [],
-          (tx, results) => {
-            var len = results.rows.length;
-            if (len > 0) {
-              navigation.navigate("Details");
-            }
-          }
-        );
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  }, []);
+
+  // useEffect(() => {
+  //   createTable();
+  //   getData();
+  // }, []);
+
+  // const createTable = () => {
+  //   db.transaction((tx) => {
+  //     tx.executeSql(
+  //       "CREATE TABLE IF NOT EXISTS " +
+  //         "Data " +
+  //         "(ID INTEGER PRIMARY KEY AUTOINCREMENT,propertytype TEXT,bedrooms INTEGER ,dateandtime DATETIME, price INTEGER ,furniture TEXT , notes TEXT, reporter TEXT);"
+  //     );
+  //   });
+  // };
+  // const getData = () => {
+  //   try {
+  //     db.transaction((tx) => {
+  //       tx.executeSql(
+  //         "SELECT propertytype,bedrooms, dateandtime,price,  furniture, notes, reporter  FROM Data",
+  //         [],
+  //         (tx, results) => {
+  //           var len = results.rows.length;
+  //           if (len > 0) {
+  //             navigation.navigate("Details");
+  //           }
+  //         }
+  //       );
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const home = () => {
     if (
