@@ -14,37 +14,26 @@ const Home = ({ navigation }) => {
   const [reporter, setreporter] = useState("");
   useEffect(() => {
     createTable();
-    getData();
-    home();
   }, []);
 
-  const createTable = () => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        "CREATE TABLE IF NOT EXISTS " +
-          "Data " +
-          "(ID INTEGER PRIMARY KEY AUTOINCREMENT,propertytype TEXT,bedrooms INTEGER ,dateandtime DATETIME, price INTEGER ,furniture TEXT , notes TEXT, reporter TEXT);"
-      );
-    });
-  };
-  const getData = () => {
-    try {
-      db.transaction((tx) => {
-        tx.executeSql(
-          "SELECT name FROM sqlite_master WHERE type='table' AND name='Data'",
-          [],
-          (tx, result) => {
-            var len = result.rows.length;
-            if (len > 0) {
-              navigation.navigate("Home");
-            }
-          }
-        );
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const getData = () => {
+  //   try {
+  //     db.transaction((tx) => {
+  //       tx.executeSql(
+  //         "SELECT name FROM sqlite_master WHERE type='table' AND name='Data'",
+  //         [],
+  //         (tx, result) => {
+  //           var len = result.rows.length;
+  //           if (len > 0) {
+  //             navigation.navigate("Home");
+  //           }
+  //         }
+  //       );
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const home = () => {
     if (
@@ -78,13 +67,19 @@ const Home = ({ navigation }) => {
             }
           );
         });
-        navigation.navigate("Details");
+        navigation.navigate("Result");
       } catch (error) {
         console.log(error);
       }
     }
   };
-
+  const createTable = () => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "CREATE TABLE IF NOT EXISTS Data(ID INTEGER PRIMARY KEY AUTOINCREMENT,propertytype TEXT,bedrooms INTEGER ,dateandtime INTEGERD, price INTEGER ,furniture TEXT , notes TEXT, reporter TEXT);"
+      );
+    });
+  };
   return (
     <View style={styles.body}>
       <Text style={styles.head}>HOME</Text>
