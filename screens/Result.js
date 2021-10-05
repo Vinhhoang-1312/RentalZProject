@@ -1,95 +1,177 @@
-import * as SQLite from "expo-sqlite";
+import "react-native-gesture-handler";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
+  TextInput,
+  FlatList,
+} from "react-native";
 
-import React, { useEffect, useState } from "react";
-import { Alert, StyleSheet, Button, Text, TextInput, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { DatabaseConnection } from "../database/connectdatabase";
 
-const db = SQLite.openDatabase("dbName", 1.0);
+const db = DatabaseConnection.getConnection();
 
-const Result = ({ navigation }) => {
-  const [propertytype, setpropertytype] = useState("");
-  const [bedrooms, setbedrooms] = useState("");
-  const [dateandtime, setdateandtime] = useState("");
-  const [price, setprice] = useState("");
-  const [furniture, setfurniture] = useState("");
-  const [notes, setnotes] = useState("");
-  const [reporter, setreporter] = useState("");
+function ViewAllScreen({ navigation }) {
+  const [items, setItems] = useState([]);
+  const [empty, setEmpty] = useState([]);
 
   useEffect(() => {
-    getData();
+    db.transaction((tx) => {
+      tx.executeSql("SELECT * FROM Databaserentalz", [], (tx, results) => {
+        var temp = [];
+        for (let i = 0; i < results.rows.length; ++i)
+          temp.push(results.rows.item(i));
+        setItems(temp);
+
+        if (results.rows.length >= 1) {
+          setEmpty(false);
+        } else {
+          setEmpty(true);
+        }
+      });
+    });
   }, []);
 
-  // const showData = () => {
-  //   navigation.navigate("Result");
-  // };
+  const listViewItemSeparator = () => {
+    return (
+      <View
+        style={{
+          height: 1,
+          width: "100%",
+          backgroundColor: "#000",
+        }}
+      />
+    );
+  };
 
-  const getData = () => {
-    try {
-      db.transaction((tx) => {
-        console.log(11111);
-        tx.executeSql("SELECT * FROM Datatable;", [], (tx, result) => {
-          console.log(JSON.stringify(result.rows));
-          var len = result.rows.length;
-          console.log(len);
-          if (len > 0) {
-            const datapropertytype = result.rows.item(0).propertytype;
-            const databedrooms = result.rows.item(0).bedrooms;
-            const datadateandtime = result.rows.item(0).dateandtime;
-            const dataprice = result.rows.item(0).price;
-            const datafurniture = result.rows.item(0).furniture;
-            const datanotes = result.rows.item(0).notes;
-            const datareporter = result.rows.item(0).reporter;
+  const emptyMSG = (status) => {
+    return (
+      <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
+        <Text style={{ fontSize: 25, textAlign: "center" }}>
+          No Record Inserted Database is Empty...
+        </Text>
+      </View>
+    );
+  };
 
-            setpropertytype(datapropertytype);
-            setbedrooms(databedrooms);
-            setdateandtime(datadateandtime);
-            setprice(dataprice);
-            setfurniture(datafurniture);
-            setnotes(datanotes);
-            setreporter(datareporter);
-          }
-        });
-      });
-    } catch (error) {
-      console.log(error);
-    }
+  const navigateToEditScreen = (
+    propertytype,
+    bedrooms,
+    dateandtime,
+    price,
+    furniture,
+    notes,
+    reporter
+  ) => {
+    navigation.navigate("Details", {
+      Property: propertytype,
+      Bedrooms: bedrooms,
+      Datetime: dateandtime,
+      Monthlyprice: price,
+      Furniture: furniture,
+      Notes: notes,
+      Namereporter: reporter,
+    });
   };
 
   return (
-    <View style={styles.body}>
-      <Text style={styles.text}>Your propertytype: {propertytype}</Text>
-      <Text style={styles.text}>Your bedrooms: {bedrooms}</Text>
-      <Text style={styles.text}>Your dateandtime: {dateandtime}</Text>
-      <Text style={styles.text}>Your price: {price}</Text>
-      <Text style={styles.text}>Your furniture: {furniture}</Text>
-      <Text style={styles.text}>Your notes: {notes}</Text>
-      <Text style={styles.text}>Your reporter: {reporter}</Text>
+    <View style={{ flex: 1 }}>
+      {empty ? (
+        emptyMSG(empty)
+      ) : (
+        <FlatList
+          data={items}
+          ItemSeparatorComponent={listViewItemSeparator}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <View key={item.Id} style={{ padding: 20 }}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigateToEditScreen(
+                    item.Property,
+                    item.Bedrooms,
+                    item.Datetime,
+                    item.Monthlyprice,
+                    item.Furniture,
+                    item.Notes,
+                    item.Namereporter
+                  )
+                }
+              >
+                <Text style={styles.itemsStyle}> Id: {item.Id} </Text>
+                <Text style={styles.itemsStyle}>
+                  {" "}
+                  property: {item.propertytype}{" "}
+                </Text>
+                <Text style={styles.itemsStyle}>
+                  {" "}
+                  bedrooms: {item.bedrooms}{" "}
+                </Text>
+                <Text style={styles.itemsStyle}>
+                  {" "}
+                  datetime: {item.dateandtime}{" "}
+                </Text>
+                <Text style={styles.itemsStyle}>
+                  {" "}
+                  monthlyprice: {item.price}{" "}
+                </Text>
+                <Text style={styles.itemsStyle}>
+                  {" "}
+                  furniture: {item.furniture}{" "}
+                </Text>
+                <Text style={styles.itemsStyle}> note: {item.notes} </Text>
+
+                <Text style={styles.itemsStyle}>
+                  {" "}
+                  namereporter: {item.reporter}{" "}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        />
+      )}
     </View>
   );
-};
-
+}
 const styles = StyleSheet.create({
-  body: {
+  mainContainer: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    padding: 10,
   },
-  text: {
-    fontSize: 20,
-    fontWeight: "bold",
-    margin: 10,
+
+  touchableOpacity: {
+    backgroundColor: "#0091EA",
+    alignItems: "center",
+    borderRadius: 8,
     justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+  },
+
+  touchableOpacityText: {
+    color: "#FFFFFF",
+    fontSize: 23,
     textAlign: "center",
+    padding: 8,
   },
-  input: {
-    width: 300,
+
+  textInputStyle: {
+    height: 45,
+    width: "90%",
+    textAlign: "center",
     borderWidth: 1,
-    borderColor: "#555",
-    borderRadius: 10,
-    backgroundColor: "#ffffff",
-    textAlign: "center",
-    fontSize: 20,
-    marginTop: 130,
-    marginBottom: 10,
+    borderColor: "#00B8D4",
+    borderRadius: 7,
+    marginTop: 15,
+  },
+
+  itemsStyle: {
+    fontSize: 22,
+    color: "#000",
   },
 });
-export default Result;
+export default ViewAllScreen;
