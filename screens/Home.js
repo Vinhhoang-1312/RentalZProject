@@ -6,6 +6,7 @@ const db = SQLite.openDatabase("dbName", 1.0);
 
 const Home = ({ navigation }) => {
   const [propertytype, setpropertytype] = useState("");
+  console.log(propertytype, "propertytype");
   const [bedrooms, setbedrooms] = useState("");
   const [dateandtime, setdateandtime] = useState("");
   const [price, setprice] = useState("");
@@ -14,8 +15,36 @@ const Home = ({ navigation }) => {
   const [reporter, setreporter] = useState("");
   useEffect(() => {
     createTable();
+    // getData();
   }, []);
-
+  // const getData = () => {
+  //   /* AsyncStorage */
+  //   // try {
+  //   //   const value = await AsyncStorage.getItem("Username");
+  //   //   if (value !== null) {
+  //   //     navigation.navigate("Home");
+  //   //   }
+  //   // } catch (error) {
+  //   //   console.log(error);
+  //   // }
+  //   /* SQLite */
+  //   try {
+  //     db.transaction((tx) => {
+  //       tx.executeSql(
+  //         "SELECT (propertytype, bedrooms,dateandtime,price,furniture,notes,reporter FROM Data",
+  //         [],
+  //         (tx, result) => {
+  //           var len = result.rows.length;
+  //           if (len > 0) {
+  //             navigation.navigate("Result");
+  //           }
+  //         }
+  //       );
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
   // const getData = () => {
   //   try {
   //     db.transaction((tx) => {
@@ -50,8 +79,9 @@ const Home = ({ navigation }) => {
     } else {
       try {
         db.transaction((tx) => {
+          // tx.executeSql("DROP TABLE IF EXISTS Data", []);
           tx.executeSql(
-            "INSERT INTO Data (propertytype, bedrooms,dateandtime,price,furniture,notes,reporter) VALUES (?,?,?,?,?,?,?);",
+            "INSERT INTO Data(propertytype, bedrooms,dateandtime,price,furniture,notes,reporter) VALUES (?,?,?,?,?,?,?);",
 
             [
               propertytype,
@@ -63,7 +93,10 @@ const Home = ({ navigation }) => {
               reporter,
             ],
             (tx, results) => {
-              console.log(results.rowsAffected);
+              console.log("Results", results.rowsAffected);
+              if (results.rowsAffected > 0) {
+                Alert.alert("Data Inserted Successfully....");
+              } else Alert.alert("Failed....");
             }
           );
         });
@@ -76,7 +109,7 @@ const Home = ({ navigation }) => {
   const createTable = () => {
     db.transaction((tx) => {
       tx.executeSql(
-        "CREATE TABLE IF NOT EXISTS Data(ID INTEGER PRIMARY KEY AUTOINCREMENT,propertytype TEXT,bedrooms INTEGER ,dateandtime INTEGERD, price INTEGER ,furniture TEXT , notes TEXT, reporter TEXT);"
+        "CREATE TABLE IF NOT EXISTS Data(ID INTEGER PRIMARY KEY AUTOINCREMENT,propertytype VARCHAR(15),bedrooms VARCHAR(15) ,dateandtime VARCHAR(15), price VARCHAR(15) ,furniture VARCHAR(15) , notes VARCHAR(15), reporter VARCHAR(15));"
       );
     });
   };
@@ -98,7 +131,7 @@ const Home = ({ navigation }) => {
         value={propertytype}
       />
       <TextInput
-        keyboardType="numeric"
+        // keyboardType="numeric"
         style={styles.input}
         placeholder="Bedrooms"
         onChangeText={(value) => setbedrooms(value)}
@@ -112,7 +145,7 @@ const Home = ({ navigation }) => {
       />
       <TextInput
         style={styles.input}
-        keyboardType="numeric"
+        // keyboardType="numeric"
         placeholder="Monthly rent price"
         onChangeText={(value) => setprice(value)}
         value={price}

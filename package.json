@@ -15,7 +15,7 @@
     "@react-navigation/drawer": "^6.1.4",
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/native-stack": "^6.1.0",
-    "expo": "~42.0.1",
+    "expo": "^42.0.4",
     "expo-sqlite": "^9.2.1",
     "expo-status-bar": "~1.0.4",
     "react": "16.13.1",
@@ -31,7 +31,8 @@
     "react-native-select-dropdown": "^1.1.0",
     "react-native-sqlite-storage": "^5.0.0",
     "react-native-web": "^0.17.1",
-    "react-navigation-stack": "^2.10.4"
+    "react-navigation-stack": "^2.10.4",
+    "sqlite": "^4.0.23"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"
