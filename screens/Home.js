@@ -15,9 +15,9 @@ const Home = ({ navigation }) => {
   const [reporter, setreporter] = useState("");
   useEffect(() => {
     createTable();
-    // getData();
+    // getDatatable();
   }, []);
-  // const getData = () => {
+  // const getDatatable = () => {
   //   /* AsyncStorage */
   //   // try {
   //   //   const value = await AsyncStorage.getItem("Username");
@@ -31,7 +31,7 @@ const Home = ({ navigation }) => {
   //   try {
   //     db.transaction((tx) => {
   //       tx.executeSql(
-  //         "SELECT (propertytype, bedrooms,dateandtime,price,furniture,notes,reporter FROM Data",
+  //         "SELECT (propertytype, bedrooms,dateandtime,price,furniture,notes,reporter FROM Datatable",
   //         [],
   //         (tx, result) => {
   //           var len = result.rows.length;
@@ -45,11 +45,11 @@ const Home = ({ navigation }) => {
   //     console.log(error);
   //   }
   // };
-  // const getData = () => {
+  // const getDatatable = () => {
   //   try {
   //     db.transaction((tx) => {
   //       tx.executeSql(
-  //         "SELECT name FROM sqlite_master WHERE type='table' AND name='Data'",
+  //         "SELECT name FROM sqlite_master WHERE type='table' AND name='Datatable'",
   //         [],
   //         (tx, result) => {
   //           var len = result.rows.length;
@@ -75,13 +75,13 @@ const Home = ({ navigation }) => {
       // notes.length === 0 ||
       // reporter.length === 0
     ) {
-      Alert.alert("Warning !!!. Please enter your data!!!");
+      Alert.alert("Warning !!!. Please enter your Datatable!!!");
     } else {
       try {
         db.transaction((tx) => {
-          // tx.executeSql("DROP TABLE IF EXISTS Data", []);
+          // tx.executeSql("DROP TABLE IF EXISTS Datatable", []);
           tx.executeSql(
-            "INSERT INTO Data(propertytype, bedrooms,dateandtime,price,furniture,notes,reporter) VALUES (?,?,?,?,?,?,?);",
+            "INSERT INTO Datatable(propertytype, bedrooms,dateandtime,price,furniture,notes,reporter) VALUES (?,?,?,?,?,?,?);",
 
             [
               propertytype,
@@ -95,7 +95,7 @@ const Home = ({ navigation }) => {
             (tx, results) => {
               console.log("Results", results.rowsAffected);
               if (results.rowsAffected > 0) {
-                Alert.alert("Data Inserted Successfully....");
+                Alert.alert("Datatable Inserted Successfully....");
               } else Alert.alert("Failed....");
             }
           );
@@ -108,8 +108,9 @@ const Home = ({ navigation }) => {
   };
   const createTable = () => {
     db.transaction((tx) => {
+      // tx.executeSql("DROP TABLE IF EXISTS Datatable", []);
       tx.executeSql(
-        "CREATE TABLE IF NOT EXISTS Data(ID INTEGER PRIMARY KEY AUTOINCREMENT,propertytype VARCHAR(15),bedrooms VARCHAR(15) ,dateandtime VARCHAR(15), price VARCHAR(15) ,furniture VARCHAR(15) , notes VARCHAR(15), reporter VARCHAR(15));"
+        "CREATE TABLE IF NOT EXISTS Datatable(ID INTEGER PRIMARY KEY AUTOINCREMENT,propertytype TEXT,bedrooms TEXT ,dateandtime TEXT, price TEXT,furniture TEXT , notes TEXT, reporter TEXT);"
       );
     });
   };

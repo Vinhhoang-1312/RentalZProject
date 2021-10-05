@@ -26,18 +26,18 @@ const Result = ({ navigation }) => {
     try {
       db.transaction((tx) => {
         console.log(11111);
-        tx.executeSql("SELECT * FROM Data;", [], (tx, result) => {
+        tx.executeSql("SELECT * FROM Datatable;", [], (tx, result) => {
           console.log(JSON.stringify(result.rows));
           var len = result.rows.length;
           console.log(len);
           if (len > 0) {
-            const datapropertytype = result.rows.item(0).Propertytype;
-            const databedrooms = result.rows.item(0).Bedrooms;
-            const datadateandtime = result.rows.item(0).Dateandtime;
-            const dataprice = result.rows.item(0).Price;
-            const datafurniture = result.rows.item(0).Furniture;
-            const datanotes = result.rows.item(0).Notes;
-            const datareporter = result.rows.item(0).Reporter;
+            const datapropertytype = result.rows.item(0).propertytype;
+            const databedrooms = result.rows.item(0).bedrooms;
+            const datadateandtime = result.rows.item(0).dateandtime;
+            const dataprice = result.rows.item(0).price;
+            const datafurniture = result.rows.item(0).furniture;
+            const datanotes = result.rows.item(0).notes;
+            const datareporter = result.rows.item(0).reporter;
 
             setpropertytype(datapropertytype);
             setbedrooms(databedrooms);
