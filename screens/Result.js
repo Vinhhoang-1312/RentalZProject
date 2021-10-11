@@ -1,20 +1,17 @@
-import "react-native-gesture-handler";
 import {
   Text,
   View,
   StyleSheet,
-  Alert,
   TouchableOpacity,
-  TextInput,
   FlatList,
 } from "react-native";
-
+import CustomButton from "../components/CustomButton";
 import React, { useState, useEffect } from "react";
 import { DatabaseConnection } from "../database/connectdatabase";
 
 const db = DatabaseConnection.getConnection();
 
-function ViewAllScreen({ navigation }) {
+function Result({ route, navigation }) {
   const [items, setItems] = useState([]);
   const [empty, setEmpty] = useState([]);
 
@@ -78,7 +75,7 @@ function ViewAllScreen({ navigation }) {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.data}>
       {empty ? (
         emptyMSG(empty)
       ) : (
@@ -142,6 +139,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
   },
+  data: {
+    flex: 1,
+  },
 
   touchableOpacity: {
     backgroundColor: "#0091EA",
@@ -174,4 +174,4 @@ const styles = StyleSheet.create({
     color: "#000",
   },
 });
-export default ViewAllScreen;
+export default Result;

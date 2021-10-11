@@ -1,4 +1,3 @@
-import "react-native-gesture-handler";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
@@ -12,8 +11,6 @@ import {
 
 import CustomButton from "../components/CustomButton";
 import { DatabaseConnection } from "../database/connectdatabase";
-import DateTimePicker from "@react-native-community/datetimepicker";
-
 const db = DatabaseConnection.getConnection();
 
 const Home = ({ navigation }) => {
@@ -36,7 +33,7 @@ const Home = ({ navigation }) => {
     // getDatabase();
   }, []);
 
-  const home = () => {
+  const submitdata = () => {
     if (
       propertytype.length === 0
       //  ||
@@ -168,20 +165,9 @@ const Home = ({ navigation }) => {
       />
 
       <View style={{ flexDirection: "row" }}>
-        <View style={styles.buttonStyle}>
-          <Button
-            title="Show All"
-            // handlePress={}
-          />
-        </View>
-        <View style={styles.buttonStyle}>
-          <Button
-            title="Sreach"
-            // handlePress={}
-          />
-        </View>
+        <View style={styles.buttonStyle}></View>
 
-        <CustomButton title="submit" handlePress={home} />
+        <CustomButton title="submit" handlePress={submitdata} />
       </View>
     </ScrollView>
   );
@@ -193,15 +179,15 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "black",
     fontWeight: "bold",
-
     fontSize: 20,
     marginBottom: 10,
     marginTop: 10,
   },
   scrollView: {
-    padding: 25,
+    padding: 30,
     borderRadius: 10,
-    marginTop: 20,
+    marginBottom: 5,
+    marginTop: 5,
     backgroundColor: "white",
   },
   body: {
@@ -222,6 +208,7 @@ const styles = StyleSheet.create({
     width: 220,
     borderRadius: 5,
     textAlign: "center",
+
     fontSize: 17,
     marginBottom: 10,
     marginTop: 10,
