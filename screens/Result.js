@@ -54,7 +54,7 @@ function Result({ route, navigation }) {
     );
   };
 
-  const navigateToDetails = (
+  const navigateToEditDelete = (
     propertytype,
     Id,
     bedrooms,
@@ -64,7 +64,7 @@ function Result({ route, navigation }) {
     notes,
     reporter
   ) => {
-    navigation.navigate("Details", {
+    navigation.navigate("EditDelete", {
       Id: Id,
       propertytype: propertytype,
       bedrooms: bedrooms,
@@ -89,7 +89,7 @@ function Result({ route, navigation }) {
             <View key={item.Id} style={{ padding: 20 }}>
               <TouchableOpacity
                 onPress={() =>
-                  navigateToDetails(
+                  navigateToEditDelete(
                     item.propertytype,
                     item.bedrooms,
                     item.dateandtime,
