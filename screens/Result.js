@@ -54,8 +54,9 @@ function Result({ route, navigation }) {
     );
   };
 
-  const navigateToEditScreen = (
+  const navigateToDetails = (
     propertytype,
+    Id,
     bedrooms,
     dateandtime,
     price,
@@ -64,13 +65,14 @@ function Result({ route, navigation }) {
     reporter
   ) => {
     navigation.navigate("Details", {
-      Property: propertytype,
-      Bedrooms: bedrooms,
-      Datetime: dateandtime,
-      Monthlyprice: price,
-      Furniture: furniture,
-      Notes: notes,
-      Namereporter: reporter,
+      Id: Id,
+      propertytype: propertytype,
+      bedrooms: bedrooms,
+      dateandtime: dateandtime,
+      price: price,
+      furniture: furniture,
+      notes: notes,
+      reporter: reporter,
     });
   };
 
@@ -87,14 +89,14 @@ function Result({ route, navigation }) {
             <View key={item.Id} style={{ padding: 20 }}>
               <TouchableOpacity
                 onPress={() =>
-                  navigateToEditScreen(
-                    item.Property,
-                    item.Bedrooms,
-                    item.Datetime,
-                    item.Monthlyprice,
-                    item.Furniture,
-                    item.Notes,
-                    item.Namereporter
+                  navigateToDetails(
+                    item.propertytype,
+                    item.bedrooms,
+                    item.dateandtime,
+                    item.price,
+                    item.furniture,
+                    item.notes,
+                    item.reporter
                   )
                 }
               >

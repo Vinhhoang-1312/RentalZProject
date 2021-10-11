@@ -14,7 +14,7 @@ import { DatabaseConnection } from "../database/connectdatabase";
 const db = DatabaseConnection.getConnection();
 
 function Details({ route, navigation }) {
-  // const [Id, setId] = useState("");
+  const [Id, setId] = useState("");
   const [propertytype, setPropertytype] = useState("");
   const [bedrooms, setBedrooms] = useState("");
   const [dateandtime, setDateandtime] = useState("");
@@ -24,7 +24,7 @@ function Details({ route, navigation }) {
   const [reporter, setReporter] = useState("");
 
   useEffect(() => {
-    // setId(route.params.Id);
+    setId(route.params.Id);
     setPropertytype(route.params.propertytype);
     setBedrooms(route.params.bedrooms);
     setDateandtime(route.params.dateandtime);
@@ -61,8 +61,8 @@ function Details({ route, navigation }) {
     try {
       db.transaction((tx) => {
         tx.executeSql(
-          "DELETE FROM Databaserentalz WHERE propertytype = ?",
-          [propertytype],
+          "DELETE FROM Databaserentalz WHERE Id = ?",
+          [Id],
           (tx, result) => {
             alert("Deleted !!!");
           }
@@ -78,9 +78,9 @@ function Details({ route, navigation }) {
         Edit
       </Text>
 
-      {/* <TextInput
+      <TextInput
         style={styles.textInputStyle}
-        onChangeText={(text) => setProperty(text)}
+        onChangeText={(text) => setPropertytype(text)}
         placeholder="Enter Property Name"
         value={propertytype}
       />
@@ -94,14 +94,14 @@ function Details({ route, navigation }) {
 
       <TextInput
         style={styles.textInputStyle}
-        onChangeText={(text) => setDatetime(text)}
+        onChangeText={(text) => setDateandtime(text)}
         placeholder="Enter Datetime"
         value={dateandtime}
       />
 
       <TextInput
         style={styles.textInputStyle}
-        onChangeText={(text) => setMonthlyprice(text)}
+        onChangeText={(text) => setPrice(text)}
         placeholder="Enter Monthlyprice"
         value={price}
       />
@@ -121,10 +121,10 @@ function Details({ route, navigation }) {
       />
       <TextInput
         style={[styles.textInputStyle, { marginBottom: 20 }]}
-        onChangeText={(text) => setNamereporter(text)}
+        onChangeText={(text) => setReporter(text)}
         placeholder="Enter Namereporter"
         value={reporter}
-      /> */}
+      />
 
       {/* <TouchableOpacity style={styles.touchableOpacity} onPress={editData}>
         <Text style={styles.touchableOpacityText}> Click Here To Edit </Text>
