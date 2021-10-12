@@ -14,7 +14,7 @@ import { DatabaseConnection } from "../database/connectdatabase";
 const db = DatabaseConnection.getConnection();
 
 const Search = ({ navigation }) => {
-  const [searchType, setSearchTpye] = useState("");
+  const [searchType, setSearchType] = useState("");
   const [TypeData, setTypeData] = useState([]);
 
   const searchPropertyType = () => {
@@ -24,9 +24,12 @@ const Search = ({ navigation }) => {
           "SELECT * FROM Databaserentalz where propertytype = ?",
           [searchType],
           (tx, results) => {
-            var len = results.rows.length;
-            console.log("len", len);
-            if (len > 0) {
+            var temp = [];
+            for (let i = 0; i < results.rows.length; ++i)
+              temp.push(results.rows.item(i));
+            setSearchType(temp);
+
+            if (results.rows.length >= 1) {
               setTypeData(results.rows.item(0));
             }
           }
@@ -42,7 +45,7 @@ const Search = ({ navigation }) => {
       </Text>
       <TextInput
         style={styles.textInputStyle}
-        onChangeText={(searchType) => setSearchTpye(searchType)}
+        onChangeText={(searchType) => setSearchType(searchType)}
         placeholder="Enter propertytype"
       />
 

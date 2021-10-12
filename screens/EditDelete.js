@@ -34,28 +34,27 @@ function EditDelete({ route, navigation }) {
     setReporter(route.params.reporter);
   }, []);
 
-  // const editData = () => {
-  //   db.transaction((tx) => {
-  //     tx.executeSql(
-  //       "UPDATE table_user set   Bedrooms=? , Datetime=? , Monthlyprice=? , Furniture=? , Notes=? , Namereporter=? where Property=?",
-  //       [
-  //         bedrooms,
-  //         datetime,
-  //         monthlyprice,
-  //         furniture,
-  //         notes,
-  //         namereporter,
-  //         property,
-  //       ],
-  //       (tx, results) => {
-  //         if (results.rowsAffected > 0) {
-  //           Alert.alert("Record Updated Successfully");
-  //           navigation.navigate("HomeScreen");
-  //         } else Alert.alert("Wanning!!,Cannot be Edited");
-  //       }
-  //     );
-  //   });
-  // };
+  const editData = () => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "UPDATE Databaserentalz SET propertytype=? ,bedrooms=? , dateandtime=? , price=? , furniture=? , notes=? , reporter=?   WHERE Id =?",
+        [
+          propertytype,
+          bedrooms,
+          dateandtime,
+          price,
+          furniture,
+          notes,
+          reporter,
+          Id,
+        ],
+        (tx, results) => {
+          console.log("Results", results.rowsAffected);
+        }
+      );
+    });
+    navigation.navigate("Result");
+  };
 
   const deleteRecord = () => {
     try {
@@ -69,7 +68,7 @@ function EditDelete({ route, navigation }) {
         );
       });
     } catch (error) {}
-    navigation.navigate("HomeScreen");
+    navigation.navigate("Result");
   };
 
   return (
@@ -80,55 +79,57 @@ function EditDelete({ route, navigation }) {
 
       <TextInput
         style={styles.textInputStyle}
-        onChangeText={(text) => setPropertytype(text)}
+        onChangeText={(value) => setPropertytype(value)}
         placeholder="Enter Property Name"
         value={propertytype}
       />
 
       <TextInput
         style={styles.textInputStyle}
-        onChangeText={(text) => setBedrooms(text)}
+        keyboardType={"numeric"}
+        onChangeText={(value) => setBedrooms(value)}
         placeholder="Enter your Bedrooms "
         value={bedrooms}
       />
 
       <TextInput
         style={styles.textInputStyle}
-        onChangeText={(text) => setDateandtime(text)}
+        onChangeText={(value) => setDateandtime(value)}
         placeholder="Enter Datetime"
         value={dateandtime}
       />
 
       <TextInput
         style={styles.textInputStyle}
-        onChangeText={(text) => setPrice(text)}
+        onChangeText={(value) => setPrice(value)}
         placeholder="Enter Monthlyprice"
-        value={price}
+        keyboardType={"numeric"}
+        value={price.toString()}
       />
 
       <TextInput
         style={styles.textInputStyle}
-        onChangeText={(text) => setFurniture(text)}
+        onChangeText={(value) => setFurniture(value)}
         placeholder="Enter Furniture"
         value={furniture}
       />
 
       <TextInput
         style={[styles.textInputStyle, { marginBottom: 20 }]}
-        onChangeText={(text) => setNotes(text)}
+        onChangeText={(value) => setNotes(value)}
         placeholder="Enter Notes"
         value={notes}
       />
       <TextInput
         style={[styles.textInputStyle, { marginBottom: 20 }]}
-        onChangeText={(text) => setReporter(text)}
+        onChangeText={(value) => setReporter(value)}
         placeholder="Enter Namereporter"
         value={reporter}
       />
 
-      {/* <TouchableOpacity style={styles.touchableOpacity} onPress={editData}>
+      <TouchableOpacity style={styles.touchableOpacity} onPress={editData}>
         <Text style={styles.touchableOpacityText}> Click Here To Edit </Text>
-      </TouchableOpacity> */}
+      </TouchableOpacity>
 
       <TouchableOpacity
         style={[

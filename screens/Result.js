@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import CustomButton from "../components/CustomButton";
+
 import React, { useState, useEffect } from "react";
 import { DatabaseConnection } from "../database/connectdatabase";
 
@@ -55,8 +55,8 @@ function Result({ route, navigation }) {
   };
 
   const navigateToEditDelete = (
-    propertytype,
     Id,
+    propertytype,
     bedrooms,
     dateandtime,
     price,
@@ -90,6 +90,7 @@ function Result({ route, navigation }) {
               <TouchableOpacity
                 onPress={() =>
                   navigateToEditDelete(
+                    item.Id,
                     item.propertytype,
                     item.bedrooms,
                     item.dateandtime,

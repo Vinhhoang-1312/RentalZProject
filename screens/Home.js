@@ -6,6 +6,7 @@ import {
   Button,
   TextInput,
   ScrollView,
+  postalCode,
   View,
 } from "react-native";
 
@@ -125,10 +126,10 @@ const Home = ({ navigation }) => {
 
       <TextInput
         style={styles.input}
-        keyboardType="numeric"
+        keyboardType={"numeric"}
         // placeholder="Monthly rent price"
         onChangeText={(value) => setprice(value)}
-        value={price}
+        value={price.toString()}
       />
       <Text>Furniture types :</Text>
 

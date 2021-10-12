@@ -6,6 +6,7 @@ import Details from "./screens/Details";
 import Home from "./screens/Home";
 import Result from "./screens/Result";
 import Sreach from "./screens/Sreach";
+import EditDelete from "./screens/EditDelete";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 const Drawer = createDrawerNavigator();
@@ -18,6 +19,7 @@ export default function App() {
         <Drawer.Screen name="Result" component={Result} />
         <Drawer.Screen name="Sreach" component={Sreach} />
         <Drawer.Screen name="Details" component={Details} />
+        <Drawer.Screen name="EditDelete" component={EditDelete} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
