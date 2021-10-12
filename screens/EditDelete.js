@@ -164,12 +164,12 @@ function EditDelete({ route, navigation }) {
 
           <TouchableOpacity
             style={[
-              styles.touchableOpacity,
+              styles.touchstyle,
               { marginTop: 20, marginBottom: 40, backgroundColor: "red" },
             ]}
             onPress={deletedata}
           >
-            <Text style={styles.touchableOpacityText}> Delete Data </Text>
+            <Text style={styles.touchstyleText}> Delete Data </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
