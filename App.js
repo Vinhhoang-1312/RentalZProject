@@ -7,7 +7,6 @@ import Home from "./screens/Home";
 import Result from "./screens/Result";
 import Sreach from "./screens/Sreach";
 import EditDelete from "./screens/EditDelete";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 const Drawer = createDrawerNavigator();
 

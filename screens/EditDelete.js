@@ -2,11 +2,12 @@ import "react-native-gesture-handler";
 import {
   Text,
   View,
-  StyleSheet,
   Alert,
+  StyleSheet,
+  SafeAreaView,
+  ScrollView,
   TouchableOpacity,
   TextInput,
-  FlatList,
 } from "react-native";
 
 import React, { useState, useEffect } from "react";
@@ -35,35 +36,51 @@ function EditDelete({ route, navigation }) {
   }, []);
 
   const editData = () => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        "UPDATE Databaserentalz SET propertytype=? ,bedrooms=? , dateandtime=? , price=? , furniture=? , notes=? , reporter=?   WHERE Id =?",
-        [
-          propertytype,
-          bedrooms,
-          dateandtime,
-          price,
-          furniture,
-          notes,
-          reporter,
-          Id,
-        ],
-        (tx, results) => {
-          console.log("Results", results.rowsAffected);
-        }
-      );
-    });
-    navigation.navigate("Result");
+    if (
+      propertytype.length === 0 ||
+      bedrooms.length === 0 ||
+      dateandtime.length === 0 ||
+      price.length === 0 ||
+      furniture.length === 0 ||
+      notes.length === 0 ||
+      reporter.length === 0
+    ) {
+      Alert.alert("Some of your information is missing !!! Please check again");
+    } else {
+      try {
+        db.transaction((tx) => {
+          tx.executeSql(
+            "UPDATE Databaserentalz SET propertytype=? ,bedrooms=? , dateandtime=? , price=? , furniture=? , notes=? , reporter=?   WHERE Id =?",
+            [
+              propertytype,
+              bedrooms,
+              dateandtime,
+              price,
+              furniture,
+              notes,
+              reporter,
+              Id,
+            ],
+            (tx, results) => {
+              console.log("Results", results.rowsAffected);
+            }
+          );
+        });
+        navigation.navigate("Result");
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
-  const deleteRecord = () => {
+  const deletedata = () => {
     try {
       db.transaction((tx) => {
         tx.executeSql(
           "DELETE FROM Databaserentalz WHERE Id = ?",
           [Id],
           (tx, result) => {
-            alert("Deleted !!!");
+            alert("Deleted success!!!");
           }
         );
       });
@@ -72,86 +89,121 @@ function EditDelete({ route, navigation }) {
   };
 
   return (
-    <View style={styles.mainContainer}>
-      <Text style={{ fontSize: 24, textAlign: "center", color: "#000" }}>
-        Edit
-      </Text>
-
-      <TextInput
-        style={styles.textInputStyle}
-        onChangeText={(value) => setPropertytype(value)}
-        placeholder="Enter Property Name"
-        value={propertytype}
-      />
-
-      <TextInput
-        style={styles.textInputStyle}
-        keyboardType={"numeric"}
-        onChangeText={(value) => setBedrooms(value)}
-        placeholder="Enter your Bedrooms "
-        value={bedrooms}
-      />
-
-      <TextInput
-        style={styles.textInputStyle}
-        onChangeText={(value) => setDateandtime(value)}
-        placeholder="Enter Datetime"
-        value={dateandtime}
-      />
-
-      <TextInput
-        style={styles.textInputStyle}
-        onChangeText={(value) => setPrice(value)}
-        placeholder="Enter Monthlyprice"
-        keyboardType={"numeric"}
-        value={price.toString()}
-      />
-
-      <TextInput
-        style={styles.textInputStyle}
-        onChangeText={(value) => setFurniture(value)}
-        placeholder="Enter Furniture"
-        value={furniture}
-      />
-
-      <TextInput
-        style={[styles.textInputStyle, { marginBottom: 20 }]}
-        onChangeText={(value) => setNotes(value)}
-        placeholder="Enter Notes"
-        value={notes}
-      />
-      <TextInput
-        style={[styles.textInputStyle, { marginBottom: 20 }]}
-        onChangeText={(value) => setReporter(value)}
-        placeholder="Enter Namereporter"
-        value={reporter}
-      />
-
-      <TouchableOpacity style={styles.touchableOpacity} onPress={editData}>
-        <Text style={styles.touchableOpacityText}> Click Here To Edit </Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[
-          styles.touchableOpacity,
-          { marginTop: 20, backgroundColor: "red" },
-        ]}
-        onPress={deleteRecord}
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        alwaysBounceVertical={false}
       >
-        <Text style={styles.touchableOpacityText}> Click Here To Delete </Text>
-      </TouchableOpacity>
-    </View>
+        <View>
+          <Text style={styles.head}>Change or delete data </Text>
+          <Text style={styles.text}>Property type:</Text>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={(value) => setPropertytype(value)}
+            value={propertytype}
+          />
+
+          <Text style={styles.text}>Bedrooms :</Text>
+          <TextInput
+            style={styles.textInput}
+            keyboardType={"numeric"}
+            onChangeText={(value) => setBedrooms(value)}
+            value={bedrooms}
+          />
+
+          <Text style={styles.text}>Data and Time :</Text>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={(value) => setDateandtime(value)}
+            value={dateandtime}
+          />
+
+          <Text style={styles.text}>Monthly rent price :</Text>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={(value) => setPrice(value)}
+            keyboardType={"numeric"}
+            value={price.toString()}
+          />
+
+          <Text style={styles.text}>Furniture types :</Text>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={(value) => setFurniture(value)}
+            value={furniture}
+          />
+
+          <Text style={styles.text}>Notes :</Text>
+          <TextInput
+            style={{
+              borderWidth: 1,
+              height: 80,
+              width: 220,
+              borderRadius: 5,
+              textAlign: "center",
+              fontSize: 17,
+              marginBottom: 10,
+              marginTop: 10,
+              borderColor: "royalblue",
+            }}
+            onChangeText={(value) => setNotes(value)}
+            value={notes}
+          />
+
+          <Text style={styles.text}>Name of the reporter :</Text>
+          <TextInput
+            style={[styles.textInput, { marginBottom: 20 }]}
+            onChangeText={(value) => setReporter(value)}
+            value={reporter}
+          />
+
+          <TouchableOpacity style={styles.touchstyle} onPress={editData}>
+            <Text style={styles.touchstyleText}> Edit Data </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.touchableOpacity,
+              { marginTop: 20, marginBottom: 40, backgroundColor: "red" },
+            ]}
+            onPress={deletedata}
+          >
+            <Text style={styles.touchableOpacityText}> Delete Data </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
-  mainContainer: {
+  container: {
     flex: 1,
-    alignItems: "center",
-    padding: 10,
+    padding: 30,
   },
-
-  touchableOpacity: {
-    backgroundColor: "#0091EA",
+  head: {
+    marginTop: 5,
+    marginBottom: 20,
+    textAlign: "center",
+    color: "black",
+    fontWeight: "bold",
+    fontSize: 20,
+  },
+  scrollView: {
+    padding: 20,
+    borderRadius: 10,
+    backgroundColor: "white",
+  },
+  text: {
+    marginTop: 20,
+    textAlign: "left",
+    color: "black",
+    fontSize: 15,
+  },
+  touchstyle: {
+    marginTop: 10,
+    marginBottom: 10,
+    backgroundColor: "dodgerblue",
     alignItems: "center",
     borderRadius: 8,
     justifyContent: "center",
@@ -159,26 +211,23 @@ const styles = StyleSheet.create({
     width: "90%",
   },
 
-  touchableOpacityText: {
-    color: "#FFFFFF",
+  touchstyleText: {
+    color: "white",
     fontSize: 23,
     textAlign: "center",
     padding: 8,
   },
 
-  textInputStyle: {
-    height: 45,
-    width: "90%",
-    textAlign: "center",
+  textInput: {
+    borderColor: "royalblue",
     borderWidth: 1,
-    borderColor: "#00B8D4",
-    borderRadius: 7,
-    marginTop: 15,
-  },
-
-  itemsStyle: {
-    fontSize: 22,
-    color: "#000",
+    height: 40,
+    width: 220,
+    borderRadius: 5,
+    textAlign: "center",
+    fontSize: 17,
+    marginBottom: 5,
+    marginTop: 10,
   },
 });
 export default EditDelete;

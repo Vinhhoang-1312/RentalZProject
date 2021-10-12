@@ -1,39 +1,38 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import CustomButton from "../components/CustomButton";
+import { View, Text, StyleSheet } from "react-native";
 import { DatabaseConnection } from "../database/connectdatabase";
 
 const db = DatabaseConnection.getConnection();
 
 const Details = ({ route }) => {
-  const { TypeData } = route.params;
+  const { Data } = route.params;
 
   return (
     <View style={styles.container}>
-      <View style={styles.listItem}>
-        <Text style={styles.textHeader}>Number</Text>
-        <Text style={styles.textBottom}>{TypeData.Id}</Text>
+      <View style={styles.ShowData}>
+        <Text style={styles.Text}>ID Number :</Text>
+        <Text style={styles.Data}>{Data.Id}</Text>
 
-        <Text style={styles.textHeader}>Property type</Text>
-        <Text style={styles.textBottom}>{TypeData.propertytype}</Text>
+        <Text style={styles.Text}>Property type :</Text>
+        <Text style={styles.Data}>{Data.propertytype}</Text>
 
-        <Text style={styles.textHeader}>Bedrooms</Text>
-        <Text style={styles.textBottom}>{TypeData.bedrooms}</Text>
+        <Text style={styles.Text}>Bedrooms :</Text>
+        <Text style={styles.Data}>{Data.bedrooms}</Text>
 
-        <Text style={styles.textHeader}>Datetime</Text>
-        <Text style={styles.textBottom}>{TypeData.dateandtime}</Text>
+        <Text style={styles.Text}>Datetime :</Text>
+        <Text style={styles.Data}>{Data.dateandtime}</Text>
 
-        <Text style={styles.textHeader}>Monthly rent price</Text>
-        <Text style={styles.textBottom}>{TypeData.price}</Text>
+        <Text style={styles.Text}>Monthly rent price :</Text>
+        <Text style={styles.Data}>{Data.price}</Text>
 
-        <Text style={styles.textHeader}>Furniture</Text>
-        <Text style={styles.textBottom}>{TypeData.furniture}</Text>
+        <Text style={styles.Text}>Furniture :</Text>
+        <Text style={styles.Data}>{Data.furniture}</Text>
 
-        <Text style={styles.textHeader}>Notes</Text>
-        <Text style={styles.textBottom}>{TypeData.notes}</Text>
+        <Text style={styles.Text}>Notes :</Text>
+        <Text style={styles.Data}>{Data.notes}</Text>
 
-        <Text style={styles.textHeader}>Name of the reporter</Text>
-        <Text style={styles.textBottom}>{TypeData.reporter}</Text>
+        <Text style={styles.Text}>Name of the reporter :</Text>
+        <Text style={styles.Data}>{Data.reporter}</Text>
       </View>
     </View>
   );
@@ -43,20 +42,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
+    padding: 25,
   },
-  listItem: {
+  ShowData: {
     padding: 25,
     borderRadius: 10,
     marginTop: 20,
-    backgroundColor: "#EEE",
+    marginBottom: 20,
+    backgroundColor: "gainsboro",
   },
-  textHeader: {
-    color: "#111",
-    fontSize: 15,
+  Text: {
+    color: "black",
+    fontSize: 18,
     fontWeight: "bold",
   },
-  textBottom: {
-    color: "#111",
+  Data: {
+    marginBottom: 10,
+    color: "black",
     fontSize: 18,
   },
 });

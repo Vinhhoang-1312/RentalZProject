@@ -3,19 +3,16 @@ import {
   Text,
   View,
   StyleSheet,
-  Alert,
   TouchableOpacity,
   TextInput,
-  FlatList,
 } from "react-native";
-
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { DatabaseConnection } from "../database/connectdatabase";
 const db = DatabaseConnection.getConnection();
 
 const Search = ({ navigation }) => {
   const [searchType, setSearchType] = useState("");
-  const [TypeData, setTypeData] = useState([]);
+  const [Data, setData] = useState([]);
 
   const searchPropertyType = () => {
     {
@@ -30,7 +27,7 @@ const Search = ({ navigation }) => {
             setSearchType(temp);
 
             if (results.rows.length >= 1) {
-              setTypeData(results.rows.item(0));
+              setData(results.rows.item(0));
             }
           }
         );
@@ -44,81 +41,66 @@ const Search = ({ navigation }) => {
         Search
       </Text>
       <TextInput
-        style={styles.textInputStyle}
+        style={styles.InputSreach}
         onChangeText={(searchType) => setSearchType(searchType)}
         placeholder="Enter propertytype"
       />
 
       <TouchableOpacity
-        style={[styles.touchableOpacity, { marginTop: 20 }]}
+        style={[styles.touchstyle, { marginTop: 20 }]}
         onPress={searchPropertyType}
       >
-        <Text style={styles.touchableOpacityText}> oke </Text>
+        <Text style={styles.touchstyleText}> Sreach </Text>
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={() => navigation.navigate("Details", { TypeData })}
+        onPress={() => navigation.navigate("Details", { Data })}
       >
-        <Text style={styles.textHeader}>Property type</Text>
-        <Text style={styles.textBottom}>{TypeData.propertytype}</Text>
+        <Text style={styles.Text}>Property type :</Text>
+        <Text style={styles.Data}>{Data.propertytype}</Text>
 
-        <Text style={styles.textHeader}>Bedrooms</Text>
-        <Text style={styles.textBottom}>{TypeData.bedrooms}</Text>
+        <Text style={styles.Text}>Datetime :</Text>
+        <Text style={styles.Data}>{Data.dateandtime}</Text>
 
-        <Text style={styles.textHeader}>Datetime</Text>
-        <Text style={styles.textBottom}>{TypeData.dateandtime}</Text>
+        <Text style={styles.Text}>Monthly rent price :</Text>
+        <Text style={styles.Data}>{Data.price}</Text>
 
-        <Text style={styles.textHeader}>Monthly rent price</Text>
-        <Text style={styles.textBottom}>{TypeData.price}</Text>
-
-        <Text style={styles.textHeader}>Furniture</Text>
-        <Text style={styles.textBottom}>{TypeData.furniture}</Text>
-
-        <Text style={styles.textHeader}>Name of the reporter</Text>
-        <Text style={styles.textBottom}>{TypeData.reporter}</Text>
+        <Text style={styles.Text}>Name of the reporter :</Text>
+        <Text style={styles.Data}>{Data.reporter}</Text>
       </TouchableOpacity>
     </View>
   );
 };
 const styles = StyleSheet.create({
-  listItem: {
-    padding: 25,
-    borderRadius: 10,
-    marginTop: 20,
-    backgroundColor: "#99CCFF",
-  },
-  textHeader: {
-    color: "#111",
+  Text: {
+    color: "black",
     fontSize: 18,
     fontWeight: "bold",
   },
-  textBottom: {
+  Data: {
+    marginBottom: 10,
     color: "black",
-    fontSize: 16,
-  },
-  mainContainer: {
-    flex: 1,
-    alignItems: "center",
-    padding: 10,
+    fontSize: 18,
   },
 
-  touchableOpacity: {
-    backgroundColor: "#0091EA",
+  touchstyle: {
+    marginTop: 10,
+    marginBottom: 40,
+    backgroundColor: "dodgerblue",
     alignItems: "center",
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
     width: "90%",
   },
-
-  touchableOpacityText: {
-    color: "#FFFFFF",
+  touchstyleText: {
+    color: "white",
     fontSize: 23,
     textAlign: "center",
-    padding: 8,
+    padding: 10,
   },
 
-  textInputStyle: {
+  InputSreach: {
     height: 45,
     width: "90%",
     textAlign: "center",
@@ -126,11 +108,6 @@ const styles = StyleSheet.create({
     borderColor: "#00B8D4",
     borderRadius: 7,
     marginTop: 15,
-  },
-
-  itemsStyle: {
-    fontSize: 22,
-    color: "#000",
   },
 });
 

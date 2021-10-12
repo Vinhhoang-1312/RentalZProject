@@ -5,13 +5,11 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-
 import React, { useState, useEffect } from "react";
 import { DatabaseConnection } from "../database/connectdatabase";
 
 const db = DatabaseConnection.getConnection();
-
-function Result({ route, navigation }) {
+function Result({ navigation }) {
   const [items, setItems] = useState([]);
   const [empty, setEmpty] = useState([]);
 
@@ -22,7 +20,6 @@ function Result({ route, navigation }) {
         for (let i = 0; i < results.rows.length; ++i)
           temp.push(results.rows.item(i));
         setItems(temp);
-
         if (results.rows.length >= 1) {
           setEmpty(false);
         } else {
@@ -36,19 +33,19 @@ function Result({ route, navigation }) {
     return (
       <View
         style={{
-          height: 1,
+          height: 2,
           width: "100%",
-          backgroundColor: "#000",
+          backgroundColor: "black",
         }}
       />
     );
   };
 
-  const emptyMSG = (status) => {
+  const emptydata = () => {
     return (
-      <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
-        <Text style={{ fontSize: 25, textAlign: "center" }}>
-          No Record Inserted Database is Empty...
+      <View style={{ justifyContent: "center", alignItems: "center" }}>
+        <Text style={{ fontSize: 20, textAlign: "center" }}>
+          You don't have data yet !!!
         </Text>
       </View>
     );
@@ -79,7 +76,7 @@ function Result({ route, navigation }) {
   return (
     <View style={styles.data}>
       {empty ? (
-        emptyMSG(empty)
+        emptydata(empty)
       ) : (
         <FlatList
           data={items}
@@ -101,33 +98,14 @@ function Result({ route, navigation }) {
                   )
                 }
               >
-                <Text style={styles.itemsStyle}> Id: {item.Id} </Text>
-                <Text style={styles.itemsStyle}>
-                  {" "}
-                  property: {item.propertytype}{" "}
-                </Text>
-                <Text style={styles.itemsStyle}>
-                  {" "}
-                  bedrooms: {item.bedrooms}{" "}
-                </Text>
-                <Text style={styles.itemsStyle}>
-                  {" "}
-                  datetime: {item.dateandtime}{" "}
-                </Text>
-                <Text style={styles.itemsStyle}>
-                  {" "}
-                  monthlyprice: {item.price}{" "}
-                </Text>
-                <Text style={styles.itemsStyle}>
-                  {" "}
-                  furniture: {item.furniture}{" "}
-                </Text>
-                <Text style={styles.itemsStyle}> note: {item.notes} </Text>
-
-                <Text style={styles.itemsStyle}>
-                  {" "}
-                  namereporter: {item.reporter}{" "}
-                </Text>
+                <Text style={styles.text}> Id: {item.Id} </Text>
+                <Text style={styles.text}> property: {item.propertytype} </Text>
+                <Text style={styles.text}> bedrooms: {item.bedrooms} </Text>
+                <Text style={styles.text}> datetime: {item.dateandtime} </Text>
+                <Text style={styles.text}> monthlyprice: {item.price} </Text>
+                <Text style={styles.text}> furniture: {item.furniture} </Text>
+                <Text style={styles.text}> note: {item.notes} </Text>
+                <Text style={styles.text}> namereporter: {item.reporter} </Text>
               </TouchableOpacity>
             </View>
           )}
@@ -137,11 +115,6 @@ function Result({ route, navigation }) {
   );
 }
 const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    alignItems: "center",
-    padding: 10,
-  },
   data: {
     flex: 1,
   },
@@ -155,24 +128,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
 
-  touchableOpacityText: {
-    color: "#FFFFFF",
-    fontSize: 23,
-    textAlign: "center",
-    padding: 8,
-  },
-
-  textInputStyle: {
-    height: 45,
-    width: "90%",
-    textAlign: "center",
-    borderWidth: 1,
-    borderColor: "#00B8D4",
-    borderRadius: 7,
-    marginTop: 15,
-  },
-
-  itemsStyle: {
+  text: {
     fontSize: 22,
     color: "#000",
   },

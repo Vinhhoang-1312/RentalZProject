@@ -3,10 +3,9 @@ import {
   Alert,
   StyleSheet,
   Text,
-  Button,
   TextInput,
+  SafeAreaView,
   ScrollView,
-  postalCode,
   View,
 } from "react-native";
 
@@ -16,7 +15,6 @@ const db = DatabaseConnection.getConnection();
 
 const Home = ({ navigation }) => {
   const [propertytype, setpropertytype] = useState("");
-  // console.log(propertytype, "propertytype");
   const [bedrooms, setbedrooms] = useState("");
   const [dateandtime, setdateandtime] = useState("");
   const [price, setprice] = useState("");
@@ -24,32 +22,24 @@ const Home = ({ navigation }) => {
   const [notes, setnotes] = useState("");
   const [reporter, setreporter] = useState("");
 
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
   useEffect(() => {
     createTable();
-    // getDatabase();
   }, []);
 
   const submitdata = () => {
     if (
-      propertytype.length === 0
-      //  ||
-      // bedrooms.length === 0 ||
-      // dateandtime.length === 0 ||
-      // price.length === 0 ||
-      // furniture.length === 0 ||
-      // notes.length === 0 ||
-      // reporter.length === 0
+      propertytype.length === 0 ||
+      bedrooms.length === 0 ||
+      dateandtime.length === 0 ||
+      price.length === 0 ||
+      furniture.length === 0 ||
+      notes.length === 0 ||
+      reporter.length === 0
     ) {
-      Alert.alert("Warning !!!. Please enter your Database!!!");
+      Alert.alert("Some of your information is missing !!! Please check again");
     } else {
       try {
         db.transaction((tx) => {
-          // tx.executeSql("DROP TABLE IF EXISTS Database", []);
           tx.executeSql(
             "INSERT INTO Databaserentalz(propertytype, bedrooms,dateandtime,price,furniture,notes,reporter) VALUES (?,?,?,?,?,?,?);",
 
@@ -82,7 +72,6 @@ const Home = ({ navigation }) => {
         "SELECT name FROM sqlite_master WHERE type='table' AND name='Databaserentalz'",
         [],
         function (tx, res) {
-          console.log("item:", res.rows.length);
           if (res.rows.length == 0) {
             tx.executeSql("DROP TABLE IF EXISTS Databaserentalz", []);
             tx.executeSql(
@@ -95,101 +84,99 @@ const Home = ({ navigation }) => {
   };
 
   return (
-    <ScrollView
-      style={styles.scrollView}
-      showsVerticalScrollIndicator={false}
-      alwaysBounceVertical={false}
-    >
-      <Text style={styles.head}>Welcome</Text>
-      <Text>Property type:</Text>
-      <TextInput
-        style={styles.input}
-        onChangeText={(value) => setpropertytype(value)}
-        value={propertytype}
-      />
-      <Text>Bedrooms :</Text>
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        alwaysBounceVertical={false}
+      >
+        <View>
+          <Text style={styles.head}>Welcome</Text>
 
-      <TextInput
-        keyboardType="numeric"
-        style={styles.input}
-        onChangeText={(value) => setbedrooms(value)}
-        value={bedrooms}
-      />
-      <Text>Data and Time :</Text>
+          <Text style={styles.text}>Property type:</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(value) => setpropertytype(value)}
+            value={propertytype}
+          />
 
-      <TextInput
-        style={styles.input}
-        onChangeText={(value) => setdateandtime(value)}
-        value={dateandtime}
-      />
-      <Text>Monthly rent price :</Text>
+          <Text style={styles.text}>Bedrooms :</Text>
+          <TextInput
+            keyboardType="numeric"
+            style={styles.input}
+            onChangeText={(value) => setbedrooms(value)}
+            value={bedrooms}
+          />
 
-      <TextInput
-        style={styles.input}
-        keyboardType={"numeric"}
-        // placeholder="Monthly rent price"
-        onChangeText={(value) => setprice(value)}
-        value={price.toString()}
-      />
-      <Text>Furniture types :</Text>
+          <Text style={styles.text}>Data and Time :</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(value) => setdateandtime(value)}
+            value={dateandtime}
+          />
 
-      <TextInput
-        style={styles.input}
-        // placeholder="Furniture types"
-        onChangeText={(value) => setfurniture(value)}
-        value={furniture}
-      />
-      <Text>Notes Feature :</Text>
+          <Text style={styles.text}>Monthly rent price :</Text>
+          <TextInput
+            style={styles.input}
+            keyboardType={"numeric"}
+            onChangeText={(value) => setprice(value)}
+            value={price.toString()}
+          />
 
-      <TextInput
-        style={{
-          borderWidth: 1,
-          height: 80,
-          width: 220,
-          borderRadius: 5,
-          textAlign: "center",
-          fontSize: 17,
-          marginBottom: 10,
-          marginTop: 10,
-        }}
-        // placeholder="Notes Feature e)"
-        onChangeText={(value) => setnotes(value)}
-        value={notes}
-      />
-      <Text>Name of the reporter :</Text>
+          <Text style={styles.text}>Furniture types :</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(value) => setfurniture(value)}
+            value={furniture}
+          />
 
-      <TextInput
-        style={styles.input}
-        // placeholder="Name of the reporter"
-        onChangeText={(value) => setreporter(value)}
-        value={reporter}
-      />
+          <Text style={styles.text}>Notes :</Text>
+          <TextInput
+            style={{
+              borderWidth: 1,
+              height: 80,
+              width: 220,
+              borderRadius: 5,
+              textAlign: "center",
+              fontSize: 17,
+              marginBottom: 10,
+              marginTop: 10,
+            }}
+            onChangeText={(value) => setnotes(value)}
+            value={notes}
+          />
 
-      <View style={{ flexDirection: "row" }}>
-        <View style={styles.buttonStyle}></View>
+          <Text style={styles.text}>Name of the reporter :</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(value) => setreporter(value)}
+            value={reporter}
+          />
 
-        <CustomButton title="submit" handlePress={submitdata} />
-      </View>
-    </ScrollView>
+          <CustomButton title="submit" handlePress={submitdata} />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   head: {
-    marginTop: 20,
+    marginTop: 5,
+    marginBottom: 20,
     textAlign: "center",
     color: "black",
     fontWeight: "bold",
     fontSize: 20,
-    marginBottom: 10,
-    marginTop: 10,
   },
   scrollView: {
-    padding: 30,
+    padding: 20,
     borderRadius: 10,
-    marginBottom: 5,
-    marginTop: 5,
     backgroundColor: "white",
+  },
+  container: {
+    flex: 1,
+    padding: 30,
   },
   body: {
     flex: 1,
@@ -198,10 +185,10 @@ const styles = StyleSheet.create({
   },
   text: {
     marginTop: 20,
-    textAlign: "center",
-    color: "blue",
-    fontWeight: "bold",
-    fontSize: 20,
+    textAlign: "left",
+    color: "black",
+
+    fontSize: 15,
   },
   input: {
     borderWidth: 1,
@@ -211,7 +198,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
 
     fontSize: 17,
-    marginBottom: 10,
+    marginBottom: 5,
     marginTop: 10,
   },
 });
