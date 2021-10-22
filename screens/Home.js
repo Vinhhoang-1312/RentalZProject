@@ -32,8 +32,6 @@ const Home = ({ navigation }) => {
       bedrooms.length === 0 ||
       dateandtime.length === 0 ||
       price.length === 0 ||
-      furniture.length === 0 ||
-      notes.length === 0 ||
       reporter.length === 0
     ) {
       Alert.alert("Some of your information is missing !!! Please check again");
