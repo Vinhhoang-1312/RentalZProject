@@ -45,7 +45,7 @@ function Result({ navigation }) {
     return (
       <View style={{ justifyContent: "center", alignItems: "center" }}>
         <Text style={{ fontSize: 20, textAlign: "center" }}>
-          You don't have data yet !!!
+          You don't have any data yet !!!
         </Text>
       </View>
     );

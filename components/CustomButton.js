@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
   buttonpress: {
     marginTop: 20,
     marginBottom: 50,
+    marginLeft: 90,
     width: 90,
     height: 40,
     alignItems: "center",

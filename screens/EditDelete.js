@@ -10,7 +10,7 @@ import {
   TextInput,
 } from "react-native";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ImageBackground } from "react";
 import { DatabaseConnection } from "../database/connectdatabase";
 const db = DatabaseConnection.getConnection();
 
@@ -34,7 +34,9 @@ function EditDelete({ route, navigation }) {
     setNotes(route.params.notes);
     setReporter(route.params.reporter);
   }, []);
-
+  const image = {
+    uri: "https://img.nh-hotels.net/anantara_plaza_nice_hotel-017-rooms.jpg?output-quality=80&resize=1600:*&background-color=white",
+  };
   const editData = () => {
     if (
       propertytype.length === 0 ||

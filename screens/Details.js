@@ -1,9 +1,11 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ImageBackground } from "react-native";
 import { DatabaseConnection } from "../database/connectdatabase";
 
 const db = DatabaseConnection.getConnection();
-
+const image = {
+  uri: "https://img.nh-hotels.net/anantara_plaza_nice_hotel-017-rooms.jpg?output-quality=80&resize=1600:*&background-color=white",
+};
 const Details = ({ route }) => {
   const { Data } = route.params;
 

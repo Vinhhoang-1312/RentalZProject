@@ -7,12 +7,15 @@ import {
   SafeAreaView,
   ScrollView,
   View,
+  ImageBackground,
 } from "react-native";
 
 import CustomButton from "../components/CustomButton";
 import { DatabaseConnection } from "../database/connectdatabase";
 const db = DatabaseConnection.getConnection();
-
+const image = {
+  uri: "https://img.nh-hotels.net/anantara_plaza_nice_hotel-017-rooms.jpg?output-quality=80&resize=1600:*&background-color=white",
+};
 const Home = ({ navigation }) => {
   const [propertytype, setpropertytype] = useState("");
   const [bedrooms, setbedrooms] = useState("");
@@ -88,71 +91,73 @@ const Home = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         alwaysBounceVertical={false}
       >
-        <View>
-          <Text style={styles.head}>Welcome</Text>
+        <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+          <View style={styles.formArea}>
+            <Text style={styles.head}>Welcome</Text>
+            <Text style={styles.text}>Property type:</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={(value) => setpropertytype(value)}
+              value={propertytype}
+            />
 
-          <Text style={styles.text}>Property type:</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={(value) => setpropertytype(value)}
-            value={propertytype}
-          />
+            <Text style={styles.text}>Bedrooms :</Text>
+            <TextInput
+              keyboardType="numeric"
+              style={styles.input}
+              onChangeText={(value) => setbedrooms(value)}
+              value={bedrooms}
+            />
 
-          <Text style={styles.text}>Bedrooms :</Text>
-          <TextInput
-            keyboardType="numeric"
-            style={styles.input}
-            onChangeText={(value) => setbedrooms(value)}
-            value={bedrooms}
-          />
+            <Text style={styles.text}>Data and Time :</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={(value) => setdateandtime(value)}
+              value={dateandtime}
+            />
 
-          <Text style={styles.text}>Data and Time :</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={(value) => setdateandtime(value)}
-            value={dateandtime}
-          />
+            <Text style={styles.text}>Monthly rent price :</Text>
+            <TextInput
+              style={styles.input}
+              keyboardType={"numeric"}
+              onChangeText={(value) => setprice(value)}
+              value={price.toString()}
+            />
 
-          <Text style={styles.text}>Monthly rent price :</Text>
-          <TextInput
-            style={styles.input}
-            keyboardType={"numeric"}
-            onChangeText={(value) => setprice(value)}
-            value={price.toString()}
-          />
+            <Text style={styles.text}>Furniture types :</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={(value) => setfurniture(value)}
+              value={furniture}
+            />
 
-          <Text style={styles.text}>Furniture types :</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={(value) => setfurniture(value)}
-            value={furniture}
-          />
+            <Text style={styles.text}>Notes :</Text>
+            <TextInput
+              style={{
+                borderWidth: 1,
+                height: 80,
+                width: 240,
+                borderRadius: 5,
+                textAlign: "center",
+                fontSize: 17,
+                marginLeft: 15,
+                marginBottom: 10,
+                marginTop: 10,
+              }}
+              onChangeText={(value) => setnotes(value)}
+              value={notes}
+            />
 
-          <Text style={styles.text}>Notes :</Text>
-          <TextInput
-            style={{
-              borderWidth: 1,
-              height: 80,
-              width: 220,
-              borderRadius: 5,
-              textAlign: "center",
-              fontSize: 17,
-              marginBottom: 10,
-              marginTop: 10,
-            }}
-            onChangeText={(value) => setnotes(value)}
-            value={notes}
-          />
+            <Text style={styles.text}>Name of the reporter :</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={(value) => setreporter(value)}
+              value={reporter}
+            />
 
-          <Text style={styles.text}>Name of the reporter :</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={(value) => setreporter(value)}
-            value={reporter}
-          />
-
-          <CustomButton title="submit" handlePress={submitdata} />
-        </View>
+            <CustomButton title="submit" handlePress={submitdata} />
+          </View>
+        </ImageBackground>
       </ScrollView>
     </SafeAreaView>
   );
@@ -162,26 +167,37 @@ const styles = StyleSheet.create({
   head: {
     marginTop: 5,
     marginBottom: 20,
+    marginLeft: 70,
     textAlign: "center",
+    justifyContent: "center",
     color: "black",
     fontWeight: "bold",
     fontSize: 20,
   },
-  scrollView: {
-    padding: 20,
+  formArea: {
+    alignSelf: "center",
+    width: "80%",
+    height: "90%",
+    backgroundColor: "#ffffff",
     borderRadius: 10,
+    top: "1%",
+    left: "1%",
+    right: "1%",
+    bottom: "5%",
+    paddingBottom: 80,
+    paddingRight: 80,
+  },
+  scrollView: {
     backgroundColor: "white",
   },
-  container: {
-    flex: 1,
-    padding: 30,
-  },
+  container: {},
   body: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },
   text: {
+    marginLeft: 20,
     marginTop: 20,
     textAlign: "left",
     color: "black",
@@ -191,13 +207,20 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     height: 40,
-    width: 220,
+    width: 240,
     borderRadius: 5,
     textAlign: "center",
-
+    marginLeft: 15,
     fontSize: 17,
     marginBottom: 5,
+
     marginTop: 10,
+  },
+  image: {
+    flex: 1,
+    justifyContent: "center",
+    paddingBottom: 20,
+    paddingRight: 10,
   },
 });
 export default Home;
