@@ -9,7 +9,7 @@ import {
   View,
   ImageBackground,
 } from "react-native";
-
+import { Picker } from "@react-native-picker/picker";
 import CustomButton from "../components/CustomButton";
 import { DatabaseConnection } from "../database/connectdatabase";
 const db = DatabaseConnection.getConnection();
@@ -18,10 +18,10 @@ const image = {
 };
 const Home = ({ navigation }) => {
   const [propertytype, setpropertytype] = useState("");
-  const [bedrooms, setbedrooms] = useState("");
+  const [bedrooms, setbedrooms] = useState("1");
   const [dateandtime, setdateandtime] = useState("");
   const [price, setprice] = useState("");
-  const [furniture, setfurniture] = useState("");
+  const [furniture, setfurniture] = useState("Fully Furnished");
   const [notes, setnotes] = useState("");
   const [reporter, setreporter] = useState("");
 
@@ -102,13 +102,25 @@ const Home = ({ navigation }) => {
             />
 
             <Text style={styles.text}>Bedrooms :</Text>
-            <TextInput
-              keyboardType="numeric"
-              style={styles.input}
-              onChangeText={(value) => setbedrooms(value)}
-              value={bedrooms}
-            />
 
+            <Picker
+              bedrooms={bedrooms}
+              style={{
+                height: 40,
+                width: 240,
+                borderWidth: 1,
+                borderRadius: 5,
+                marginLeft: 15,
+                fontSize: 17,
+                marginBottom: 5,
+                marginTop: 10,
+              }}
+              onValueChange={(itemValue, itemIndex) => setbedrooms(itemValue)}
+            >
+              <Picker.Item label="1" value="1" />
+              <Picker.Item label="2" value="2" />
+              <Picker.Item label="3" value="3" />
+            </Picker>
             <Text style={styles.text}>Data and Time :</Text>
             <TextInput
               style={styles.input}
@@ -125,11 +137,25 @@ const Home = ({ navigation }) => {
             />
 
             <Text style={styles.text}>Furniture types :</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(value) => setfurniture(value)}
-              value={furniture}
-            />
+
+            <Picker
+              furniture={furniture}
+              style={{
+                height: 40,
+                width: 240,
+                borderWidth: 1,
+                borderRadius: 5,
+                marginLeft: 15,
+                fontSize: 17,
+                marginBottom: 5,
+                marginTop: 10,
+              }}
+              onValueChange={(itemValue, itemIndex) => setfurniture(itemValue)}
+            >
+              <Picker.Item label="Fully Furnished" value="Fully Furnished" />
+              <Picker.Item label="Unfurnished" value="Unfurnished" />
+              <Picker.Item label="Semi Furnished" value="Semi Furnished" />
+            </Picker>
 
             <Text style={styles.text}>Notes :</Text>
             <TextInput
