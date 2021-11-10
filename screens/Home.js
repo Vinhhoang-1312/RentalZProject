@@ -7,11 +7,13 @@ import {
   SafeAreaView,
   ScrollView,
   View,
+  Button,
   ImageBackground,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import CustomButton from "../components/CustomButton";
 import { DatabaseConnection } from "../database/connectdatabase";
+
 const db = DatabaseConnection.getConnection();
 const image = {
   uri: "https://img.nh-hotels.net/anantara_plaza_nice_hotel-017-rooms.jpg?output-quality=80&resize=1600:*&background-color=white",
@@ -30,42 +32,56 @@ const Home = ({ navigation }) => {
   }, []);
 
   const submitdata = () => {
-    if (
-      propertytype.length === 0 ||
-      bedrooms.length === 0 ||
-      dateandtime.length === 0 ||
-      price.length === 0 ||
-      reporter.length === 0
-    ) {
-      Alert.alert("Some of your information is missing !!! Please check again");
-    } else {
-      try {
-        db.transaction((tx) => {
-          tx.executeSql(
-            "INSERT INTO Databaserentalz(propertytype, bedrooms,dateandtime,price,furniture,notes,reporter) VALUES (?,?,?,?,?,?,?);",
+    Alert.alert("Confirm", "Are you sure?", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: () => {
+          if (
+            propertytype.length === 0 ||
+            bedrooms.length === 0 ||
+            dateandtime.length === 0 ||
+            price.length === 0 ||
+            reporter.length === 0
+          ) {
+            Alert.alert(
+              "Some of your information is missing !!! Please check again"
+            );
+          } else {
+            try {
+              db.transaction((tx) => {
+                tx.executeSql(
+                  "INSERT INTO Databaserentalz(propertytype, bedrooms,dateandtime,price,furniture,notes,reporter) VALUES (?,?,?,?,?,?,?);",
 
-            [
-              propertytype,
-              bedrooms,
-              dateandtime,
-              price,
-              furniture,
-              notes,
-              reporter,
-            ],
-            (tx, results) => {
-              console.log("Results", results.rowsAffected);
-              if (results.rowsAffected > 0) {
-                Alert.alert("Database Inserted Successfully....");
-              } else Alert.alert("Failed....");
+                  [
+                    propertytype,
+                    bedrooms,
+                    dateandtime,
+                    price,
+                    furniture,
+                    notes,
+                    reporter,
+                  ],
+                  (tx, results) => {
+                    console.log("Results", results.rowsAffected);
+                    if (results.rowsAffected > 0) {
+                      Alert.alert("Database Inserted Successfully....");
+                    } else Alert.alert("Failed....");
+                  }
+                );
+              });
+              navigation.navigate("Result");
+            } catch (error) {
+              console.log(error);
             }
-          );
-        });
-        navigation.navigate("Result");
-      } catch (error) {
-        console.log(error);
-      }
-    }
+          }
+        },
+      },
+    ]);
   };
   const createTable = () => {
     db.transaction(function (txn) {
@@ -104,7 +120,7 @@ const Home = ({ navigation }) => {
             <Text style={styles.text}>Bedrooms :</Text>
 
             <Picker
-              bedrooms={bedrooms}
+              selectedValue={bedrooms}
               style={{
                 height: 40,
                 width: 240,
@@ -139,7 +155,7 @@ const Home = ({ navigation }) => {
             <Text style={styles.text}>Furniture types :</Text>
 
             <Picker
-              furniture={furniture}
+              selectedValue={furniture}
               style={{
                 height: 40,
                 width: 240,

@@ -41,7 +41,7 @@ const Search = ({ navigation }) => {
         Search
       </Text>
       <TextInput
-        style={styles.InputSreach}
+        style={styles.InputData}
         onChangeText={(searchType) => setSearchType(searchType)}
         placeholder="Enter propertytype"
       />
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 
-  InputSreach: {
+  InputData: {
     height: 45,
     width: "90%",
     textAlign: "center",
