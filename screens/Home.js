@@ -8,6 +8,7 @@ import {
   ScrollView,
   View,
   Button,
+  UselessTextInput,
   ImageBackground,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
@@ -213,6 +214,8 @@ const Home = ({ navigation }) => {
                 marginBottom: 10,
                 marginTop: 10,
               }}
+              multiline
+              numberOfLines={4}
               onChangeText={(value) => setnotes(value)}
               value={notes}
             />
