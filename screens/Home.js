@@ -13,7 +13,9 @@ import {
 import { Picker } from "@react-native-picker/picker";
 import CustomButton from "../components/CustomButton";
 import { DatabaseConnection } from "../database/connectdatabase";
-
+import { LogBox } from "react-native";
+LogBox.ignoreLogs(["new NativeEventEmitter"]); // Ignore log notification by message
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 const db = DatabaseConnection.getConnection();
 const image = {
   uri: "https://img.nh-hotels.net/anantara_plaza_nice_hotel-017-rooms.jpg?output-quality=80&resize=1600:*&background-color=white",
@@ -29,6 +31,7 @@ const Home = ({ navigation }) => {
 
   useEffect(() => {
     createTable();
+    getDatabaselogbookrentalz();
   }, []);
 
   const submitdata = () => {
@@ -55,7 +58,7 @@ const Home = ({ navigation }) => {
             try {
               db.transaction((tx) => {
                 tx.executeSql(
-                  "INSERT INTO Databaserentalz(propertytype, bedrooms,dateandtime,price,furniture,notes,reporter) VALUES (?,?,?,?,?,?,?);",
+                  "INSERT INTO Databaselogbookrentalz(propertytype, bedrooms,dateandtime,price,furniture,notes,reporter) VALUES (?,?,?,?,?,?,?);",
 
                   [
                     propertytype,
@@ -75,6 +78,13 @@ const Home = ({ navigation }) => {
                 );
               });
               navigation.navigate("Result");
+              setpropertytype("");
+              setbedrooms("1");
+              setdateandtime("");
+              setfurniture("Fully Furnished");
+              setnotes("");
+              setprice("");
+              setreporter("");
             } catch (error) {
               console.log(error);
             }
@@ -83,16 +93,33 @@ const Home = ({ navigation }) => {
       },
     ]);
   };
+
+  const getDatabaselogbookrentalz = () => {
+    try {
+      db.transaction((tx) => {
+        tx.executeSql(
+          "SELECT * FROM Databaselogbookrentalz",
+          [],
+          (tx, result) => {
+            console.log(JSON.stringify(result.rows));
+          }
+        );
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const createTable = () => {
     db.transaction(function (txn) {
       txn.executeSql(
-        "SELECT name FROM sqlite_master WHERE type='table' AND name='Databaserentalz'",
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='Databaselogbookrentalz'",
         [],
         function (tx, res) {
           if (res.rows.length == 0) {
-            tx.executeSql("DROP TABLE IF EXISTS Databaserentalz", []);
+            tx.executeSql("DROP TABLE IF EXISTS Databaselogbookrentalz", []);
             tx.executeSql(
-              "CREATE TABLE IF NOT EXISTS Databaserentalz(Id INTEGER PRIMARY KEY AUTOINCREMENT,propertytype VARCHAR(255),bedrooms VARCHAR(255) ,dateandtime datetime, price INT(11),furniture VARCHAR(255) , notes VARCHAR(255), reporter VARCHAR(255));"
+              "CREATE TABLE IF NOT EXISTS Databaselogbookrentalz(Id INTEGER PRIMARY KEY AUTOINCREMENT,propertytype VARCHAR(255),bedrooms VARCHAR(255) ,dateandtime datetime, price INT(11),furniture VARCHAR(255) , notes VARCHAR(255), reporter VARCHAR(255));"
             );
           }
         }
@@ -108,7 +135,7 @@ const Home = ({ navigation }) => {
         alwaysBounceVertical={false}
       >
         <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-          <View style={styles.formArea}>
+          <View style={styles.form}>
             <Text style={styles.head}>Welcome</Text>
             <Text style={styles.text}>Property type:</Text>
             <TextInput
@@ -144,7 +171,7 @@ const Home = ({ navigation }) => {
               value={dateandtime}
             />
 
-            <Text style={styles.text}>Monthly rent price :</Text>
+            <Text style={styles.text}>Monthly rent price - dollar$:</Text>
             <TextInput
               style={styles.input}
               keyboardType={"numeric"}
@@ -216,7 +243,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 20,
   },
-  formArea: {
+  form: {
     alignSelf: "center",
     width: "80%",
     height: "90%",
