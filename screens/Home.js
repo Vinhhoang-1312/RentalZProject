@@ -59,7 +59,7 @@ const Home = ({ navigation }) => {
             try {
               db.transaction((tx) => {
                 tx.executeSql(
-                  "INSERT INTO Databaselogbookrentalz(propertytype, bedrooms,dateandtime,price,furniture,notes,reporter) VALUES (?,?,?,?,?,?,?);",
+                  "INSERT INTO Databaserentalz(propertytype, bedrooms,dateandtime,price,furniture,notes,reporter) VALUES (?,?,?,?,?,?,?);",
 
                   [
                     propertytype,
@@ -98,13 +98,9 @@ const Home = ({ navigation }) => {
   const getDatabaselogbookrentalz = () => {
     try {
       db.transaction((tx) => {
-        tx.executeSql(
-          "SELECT * FROM Databaselogbookrentalz",
-          [],
-          (tx, result) => {
-            console.log(JSON.stringify(result.rows));
-          }
-        );
+        tx.executeSql("SELECT * FROM Databaserentalz", [], (tx, result) => {
+          console.log(JSON.stringify(result.rows));
+        });
       });
     } catch (error) {
       console.log(error);
@@ -114,13 +110,13 @@ const Home = ({ navigation }) => {
   const createTable = () => {
     db.transaction(function (txn) {
       txn.executeSql(
-        "SELECT name FROM sqlite_master WHERE type='table' AND name='Databaselogbookrentalz'",
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='Databaserentalz'",
         [],
         function (tx, res) {
           if (res.rows.length == 0) {
-            tx.executeSql("DROP TABLE IF EXISTS Databaselogbookrentalz", []);
+            tx.executeSql("DROP TABLE IF EXISTS Databaserentalz", []);
             tx.executeSql(
-              "CREATE TABLE IF NOT EXISTS Databaselogbookrentalz(Id INTEGER PRIMARY KEY AUTOINCREMENT,propertytype VARCHAR(255),bedrooms VARCHAR(255) ,dateandtime datetime, price INT(11),furniture VARCHAR(255) , notes VARCHAR(255), reporter VARCHAR(255));"
+              "CREATE TABLE IF NOT EXISTS Databaserentalz(Id INTEGER PRIMARY KEY AUTOINCREMENT,propertytype VARCHAR(255),bedrooms VARCHAR(255) ,dateandtime datetime, price INT(11),furniture VARCHAR(255) , notes VARCHAR(255), reporter VARCHAR(255));"
             );
           }
         }
