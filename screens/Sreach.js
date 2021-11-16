@@ -18,7 +18,7 @@ const Search = ({ navigation }) => {
     {
       db.transaction((tx) => {
         tx.executeSql(
-          "SELECT * FROM Databaserentalz where propertytype = ?",
+          "SELECT * FROM Databaserentalz2 where propertytype = ?",
           [searchType],
           (tx, results) => {
             var temp = [];

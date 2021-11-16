@@ -15,6 +15,8 @@ import { Picker } from "@react-native-picker/picker";
 import CustomButton from "../components/CustomButton";
 import { DatabaseConnection } from "../database/connectdatabase";
 import { LogBox } from "react-native";
+import DatePicker from "react-native-datepicker";
+
 LogBox.ignoreLogs(["new NativeEventEmitter"]); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 const db = DatabaseConnection.getConnection();
@@ -45,21 +47,29 @@ const Home = ({ navigation }) => {
       {
         text: "OK",
         onPress: () => {
-          if (
-            propertytype.length === 0 ||
-            bedrooms.length === 0 ||
-            dateandtime.length === 0 ||
-            price.length === 0 ||
-            reporter.length === 0
-          ) {
-            Alert.alert(
-              "Some of your information is missing !!! Please check again"
-            );
+          if (!propertytype) {
+            Alert.alert("Please input property type data");
+            return;
+          }
+          if (!bedrooms) {
+            Alert.alert("Please pick bedrooms data");
+          }
+          if (!dateandtime) {
+            Alert.alert("Please pick date data");
+            return;
+          }
+          if (!price) {
+            Alert.alert("Please input price data");
+            return;
+          }
+          if (!reporter) {
+            Alert.alert("Please input reporter name");
+            return;
           } else {
             try {
               db.transaction((tx) => {
                 tx.executeSql(
-                  "INSERT INTO Databaserentalz(propertytype, bedrooms,dateandtime,price,furniture,notes,reporter) VALUES (?,?,?,?,?,?,?);",
+                  "INSERT INTO Databaserentalz2(propertytype, bedrooms,dateandtime,price,furniture,notes,reporter) VALUES (?,?,?,?,?,?,?);",
 
                   [
                     propertytype,
@@ -77,6 +87,7 @@ const Home = ({ navigation }) => {
                     } else Alert.alert("Failed....");
                   }
                 );
+                Alert.alert("Fail, Property Type must be unique value");
               });
               navigation.navigate("Result");
               setpropertytype("");
@@ -98,7 +109,7 @@ const Home = ({ navigation }) => {
   const getDatabaselogbookrentalz = () => {
     try {
       db.transaction((tx) => {
-        tx.executeSql("SELECT * FROM Databaserentalz", [], (tx, result) => {
+        tx.executeSql("SELECT * FROM Databaserentalz2", [], (tx, result) => {
           console.log(JSON.stringify(result.rows));
         });
       });
@@ -110,13 +121,13 @@ const Home = ({ navigation }) => {
   const createTable = () => {
     db.transaction(function (txn) {
       txn.executeSql(
-        "SELECT name FROM sqlite_master WHERE type='table' AND name='Databaserentalz'",
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='Databaserentalz2'",
         [],
         function (tx, res) {
           if (res.rows.length == 0) {
-            tx.executeSql("DROP TABLE IF EXISTS Databaserentalz", []);
+            tx.executeSql("DROP TABLE IF EXISTS Databaserentalz2", []);
             tx.executeSql(
-              "CREATE TABLE IF NOT EXISTS Databaserentalz(Id INTEGER PRIMARY KEY AUTOINCREMENT,propertytype VARCHAR(255),bedrooms VARCHAR(255) ,dateandtime datetime, price INT(11),furniture VARCHAR(255) , notes VARCHAR(255), reporter VARCHAR(255));"
+              "CREATE TABLE IF NOT EXISTS Databaserentalz2(Id INTEGER PRIMARY KEY AUTOINCREMENT,propertytype VARCHAR(255) UNIQUE,bedrooms VARCHAR(255) ,dateandtime datetime, price INT(11),furniture VARCHAR(255) , notes VARCHAR(255), reporter VARCHAR(255));"
             );
           }
         }
@@ -162,13 +173,37 @@ const Home = ({ navigation }) => {
               <Picker.Item label="3" value="3" />
             </Picker>
             <Text style={styles.text}>Data and Time :</Text>
-            <TextInput
+            {/* <TextInput
               style={styles.input}
               placeholder="DD/MM/YYYY/HH:MM:SS"
               onChangeText={(value) => setdateandtime(value)}
               value={dateandtime}
+            /> */}
+            <DatePicker
+              style={styles.dateandtimePicker}
+              date={dateandtime}
+              mode="date"
+              placeholder="select date"
+              format="DD-MM-YYYY"
+              minDate="01-01-2020"
+              maxDate="01-01-2025"
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateandtimeIcon: {
+                  position: "absolute",
+                  left: 0,
+                  top: 4,
+                  marginLeft: 0,
+                },
+                dateandtimeInput: {
+                  marginLeft: 36,
+                },
+              }}
+              onDateChange={(date) => {
+                setdateandtime(date);
+              }}
             />
-
             <Text style={styles.text}>Monthly rent price - dollar$:</Text>
             <TextInput
               style={styles.input}
@@ -290,6 +325,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingBottom: 20,
     paddingRight: 10,
+  },
+  dateandtimePicker: {
+    width: 200,
+    marginTop: 20,
+    marginLeft: 20,
+    borderRadius: 10,
+    borderWidth: 1,
   },
 });
 export default Home;

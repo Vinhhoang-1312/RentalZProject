@@ -52,7 +52,7 @@ function EditDelete({ route, navigation }) {
       try {
         db.transaction((tx) => {
           tx.executeSql(
-            "UPDATE Databaserentalz SET propertytype=? ,bedrooms=? , dateandtime=? , price=? , furniture=? , notes=? , reporter=?   WHERE Id =?",
+            "UPDATE Databaserentalz2 SET propertytype=? ,bedrooms=? , dateandtime=? , price=? , furniture=? , notes=? , reporter=?   WHERE Id =?",
             [
               propertytype,
               bedrooms,
@@ -79,7 +79,7 @@ function EditDelete({ route, navigation }) {
     try {
       db.transaction((tx) => {
         tx.executeSql(
-          "DELETE FROM Databaserentalz WHERE Id = ?",
+          "DELETE FROM Databaserentalz2 WHERE Id = ?",
           [Id],
           (tx, result) => {
             alert("Deleted success!!!");

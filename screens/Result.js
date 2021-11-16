@@ -15,7 +15,7 @@ function Result({ navigation }) {
 
   useEffect(() => {
     db.transaction((tx) => {
-      tx.executeSql("SELECT * FROM Databaserentalz", [], (tx, results) => {
+      tx.executeSql("SELECT * FROM Databaserentalz2", [], (tx, results) => {
         var temp = [];
         for (let i = 0; i < results.rows.length; ++i)
           temp.push(results.rows.item(i));
